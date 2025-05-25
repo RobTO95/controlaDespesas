@@ -1,0 +1,3 @@
+/**
+ * Processo de renderização
+ */

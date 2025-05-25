@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'self'; script-src 'self'"
+		/>
+		<title>App Despesas</title>
+		<link
+			rel="stylesheet"
+			href="./public/css/style.css"
+		/>
+	</head>
+	<body>
+		<nav>
+			<div>
+				<a
+					href="#/home"
+					class="btn"
+					>Home</a
+				>
+			</div>
+
+			<div>
+				<a
+					href="#/despesas"
+					class="btn"
+					>Depesas</a
+				>
+				<a
+					href="#/funcionarios"
+					class="btn"
+					>Funcionários</a
+				>
+				<a
+					href="#/analises"
+					class="btn"
+					>Análises</a
+				>
+			</div>
+		</nav>
+		<main id="app"></main>
+		<script src="./router.js"></script>
+		<script src="./renderer.js"></script>
+	</body>
+</html>

@@ -1,0 +1,4 @@
+/node_modules
+/src/data/data.db
+/electron.txt
+/sqlite.txt

@@ -1,0 +1,22 @@
+{
+	"name": "controladespesas",
+	"version": "1.0.0",
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron .",
+		"create-db": "electron ./src/data/db.js",
+		"seed-db": "electron ./src/data/seed.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"electron": "^36.3.1",
+		"electron-rebuild": "^3.2.9"
+	},
+	"dependencies": {
+		"better-sqlite3": "^11.10.0"
+	}
+}
