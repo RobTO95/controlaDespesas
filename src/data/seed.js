@@ -194,4 +194,89 @@ const despesas = [
 
 seedTable("tabDespesas", despesas);
 
+const funcionarios = [
+    {
+        nome: "Robério Oliveira",
+        sexo: 2,
+        cpf: "99999999999",
+        data_nascimento: "1995-03-09",
+        contato: "99999999999",
+        endereco: "Rua Elisa Wolkmann Maass, 380",
+        cep: "99999999",
+        email: "roberio.oliveira.trabalho@gmail.com",
+        status_funcionario: 1,
+        banco: "",
+        agencia: "",
+        conta: "",
+        imagem: "",
+        vinculo: 3, // Prestador de serviço
+    },
+    {
+        nome: "Ana Carolina Silva",
+        sexo: 1,
+        cpf: "88888888888",
+        data_nascimento: "1990-06-15",
+        contato: "88888888888",
+        endereco: "Avenida Paulista, 1000",
+        cep: "01310000",
+        email: "ana.silva@gmail.com",
+        status_funcionario: 1,
+        banco: "Banco do Brasil",
+        agencia: "1234-5",
+        conta: "987654-3",
+        imagem: "",
+        vinculo: 1, // CLT
+    },
+    {
+        nome: "Carlos Eduardo Almeida",
+        sexo: 2,
+        cpf: "77777777777",
+        data_nascimento: "1988-09-21",
+        contato: "77777777777",
+        endereco: "Rua das Palmeiras, 45",
+        cep: "20040000",
+        email: "carlos.almeida@empresa.com",
+        status_funcionario: 1,
+        banco: "Itaú",
+        agencia: "4321-6",
+        conta: "123456-7",
+        imagem: "",
+        vinculo: 2, // PJ
+    },
+    {
+        nome: "Beatriz Santos",
+        sexo: 1,
+        cpf: "66666666666",
+        data_nascimento: "1993-12-05",
+        contato: "66666666666",
+        endereco: "Rua das Flores, 230",
+        cep: "04567000",
+        email: "beatriz.santos@empresa.com",
+        status_funcionario: 1,
+        banco: "Bradesco",
+        agencia: "7890-1",
+        conta: "654321-9",
+        imagem: "",
+        vinculo: 1, // CLT
+    },
+    {
+        nome: "Lucas Pereira",
+        sexo: 2,
+        cpf: "55555555555",
+        data_nascimento: "1997-02-10",
+        contato: "55555555555",
+        endereco: "Rua do Sol, 789",
+        cep: "30310000",
+        email: "lucas.pereira@empresa.com",
+        status_funcionario: 2, // Inativo
+        banco: "Santander",
+        agencia: "2345-8",
+        conta: "765432-1",
+        imagem: "",
+        vinculo: 4, // Doméstico
+    },
+];
+
+seedTable("tabFuncionarios", funcionarios);
+
 console.log("Tabelas carregadas com sucesso!");

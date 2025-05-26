@@ -38,7 +38,8 @@ app.on("window-all-closed", () => {
 });
 
 // 🔥 Carrega os handlers do IPC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const despesasIpc = require("./src/ipc/despesaIpc.js");
+const despesaIpc = require("./src/ipc/despesaIpc.js");
+const funcionarioIpc = require("./src/ipc/funcionarioIpc.js");
 
 // comunicação para enviar dados >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -55,6 +56,7 @@ ipcMain.handle("get-despesas", () => {
 			tabStatusDespesa AS s ON d.status_despesa = s.id`;
 
         const despesas = db.prepare(query).all();
+<<<<<<< HEAD
         console.log("despesas", despesas);
         // Formata o valor para moeda brasileira
         const formatter = new Intl.NumberFormat("pt-BR", {
@@ -68,6 +70,21 @@ ipcMain.handle("get-despesas", () => {
             valor: formatter.format(d.valor),
         }));
 
+=======
+
+        // Formata o valor para moeda brasileira
+        const formatter = new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        });
+
+        // Mapeia as despesas para formatar o valor
+        const despesasFormatadas = despesas.map((d) => ({
+            ...d,
+            valor: formatter.format(d.valor),
+        }));
+
+>>>>>>> funcionarios
         return despesasFormatadas;
     } catch (e) {
         console.error("Erro ao buscar despesas", e);
@@ -146,3 +163,24 @@ ipcMain.handle("get-status-despesa", () => {
         return [];
     }
 });
+
+// Funcionarios >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.handle("get-funcionarios", () => {
+    try {
+        const query = `
+		SELECT 
+			f.id, f.nome, f.contato, s.status_funcionario
+		FROM
+			tabFuncionarios AS f
+		INNER JOIN 
+			tabStatusFuncionario AS s ON f.status_funcionario = s.id
+		`;
+        const funcionarios = db.prepare(query).all();
+
+        return funcionarios;
+    } catch {
+        console.log("Erro ao buscar funcionarios ", e);
+        return [];
+    }
+});
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

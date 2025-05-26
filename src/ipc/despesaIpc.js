@@ -4,35 +4,35 @@ const { Despesa } = require("../models/Despesa.js");
 
 // Handler para buscar todas as despesas
 ipcMain.handle("despesa:getAll", () => {
-	return Despesa.getAll(); // Puxa todas as despesas do banco
+    return Despesa.getAll(); // Puxa todas as despesas do banco
 });
 
 // Handler para buscar uma despesa por ID
 ipcMain.handle("despesa:get", (event, id) => {
-	const despesa = new Despesa(id);
-	despesa.getDados();
-	return despesa;
+    const despesa = new Despesa(id);
+    despesa.getDados();
+    return despesa;
 });
 
 // Handler para inserir nova despesa
 ipcMain.handle("despesa:insert", (event, data) => {
-	const novaDespesa = new Despesa();
-	Object.assign(novaDespesa, data);
-	novaDespesa.insert();
-	return novaDespesa.id;
+    const novaDespesa = new Despesa();
+    Object.assign(novaDespesa, data);
+    novaDespesa.insert();
+    return novaDespesa.id;
 });
 
 // Handler para atualizar despesa
 ipcMain.handle("despesa:update", (event, data) => {
-	const despesa = new Despesa(data.id);
-	Object.assign(despesa, data);
-	despesa.update();
-	return true;
+    const despesa = new Despesa(data.id);
+    Object.assign(despesa, data);
+    despesa.update();
+    return true;
 });
 
 // Handler para deletar despesa
 ipcMain.handle("despesa:delete", (event, id) => {
-	const despesa = new Despesa(id);
-	despesa.delete();
-	return true;
+    const despesa = new Despesa(id);
+    despesa.delete();
+    return true;
 });
