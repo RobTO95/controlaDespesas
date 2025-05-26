@@ -9,32 +9,32 @@ const dbPath = path.join(__dirname, "src", "data", "data.db"); // ajuste o camin
 const db = new Database(dbPath, { verbose: console.log });
 
 function createWindow() {
-	const win = new BrowserWindow({
-		width: 800,
-		height: 600,
-		icon: "./src/public/img/logo.png",
-		autoHideMenuBar: true,
-		webPreferences: {
-			preload: path.join(__dirname, "src", "preload.js"),
-		},
-	});
-	win.loadFile(path.join(__dirname, "src", "index.html"));
-	win.webContents.openDevTools();
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        icon: "./src/public/img/logo.png",
+        autoHideMenuBar: true,
+        webPreferences: {
+            preload: path.join(__dirname, "src", "preload.js"),
+        },
+    });
+    win.loadFile(path.join(__dirname, "src", "index.html"));
+    win.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
-	createWindow();
-	app.on("activate", () => {
-		if (BrowserWindow.getAllWindows().length === 0) {
-			createWindow();
-		}
-	});
+    createWindow();
+    app.on("activate", () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
 });
 
 app.on("window-all-closed", () => {
-	if (process.platform !== "darwin") {
-		app.quit();
-	}
+    if (process.platform !== "darwin") {
+        app.quit();
+    }
 });
 
 // 🔥 Carrega os handlers do IPC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -43,8 +43,8 @@ const despesasIpc = require("./src/ipc/despesaIpc.js");
 // comunicação para enviar dados >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 ipcMain.handle("get-despesas", () => {
-	try {
-		const query = `
+    try {
+        const query = `
 		SELECT 
 			d.id, d.descricao, c.categoria, d.valor, d.data, s.status_despesa 
 		FROM 
@@ -54,95 +54,95 @@ ipcMain.handle("get-despesas", () => {
 		INNER JOIN 
 			tabStatusDespesa AS s ON d.status_despesa = s.id`;
 
-		const despesas = db.prepare(query).all();
+        const despesas = db.prepare(query).all();
+        console.log("despesas", despesas);
+        // Formata o valor para moeda brasileira
+        const formatter = new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        });
 
-		// Formata o valor para moeda brasileira
-		const formatter = new Intl.NumberFormat("pt-BR", {
-			style: "currency",
-			currency: "BRL",
-		});
+        // Mapeia as despesas para formatar o valor
+        const despesasFormatadas = despesas.map((d) => ({
+            ...d,
+            valor: formatter.format(d.valor),
+        }));
 
-		// Mapeia as despesas para formatar o valor
-		const despesasFormatadas = despesas.map((d) => ({
-			...d,
-			valor: formatter.format(d.valor),
-		}));
-
-		return despesasFormatadas;
-	} catch (e) {
-		console.error("Erro ao buscar despesas", e);
-		return [];
-	}
+        return despesasFormatadas;
+    } catch (e) {
+        console.error("Erro ao buscar despesas", e);
+        return [];
+    }
 });
 
 ipcMain.handle("get-categoria-despesa", () => {
-	try {
-		const query = `
+    try {
+        const query = `
 		SELECT 
 			id,
 			categoria 
 		FROM 
 			tabCategoria`;
 
-		const categorias = db.prepare(query).all();
+        const categorias = db.prepare(query).all();
 
-		return categorias;
-	} catch (e) {
-		console.error("Erro ao buscar categoria", e);
-		return [];
-	}
+        return categorias;
+    } catch (e) {
+        console.error("Erro ao buscar categoria", e);
+        return [];
+    }
 });
 
 ipcMain.handle("get-forma-pagamento", () => {
-	try {
-		const query = `
+    try {
+        const query = `
 		SELECT 
 			id,
 			forma_pagamento 
 		FROM 
 			tabFormaPagamento`;
 
-		const forma_pagamento = db.prepare(query).all();
+        const forma_pagamento = db.prepare(query).all();
 
-		return forma_pagamento;
-	} catch (e) {
-		console.error("Erro ao buscar forma de pagamento", e);
-		return [];
-	}
+        return forma_pagamento;
+    } catch (e) {
+        console.error("Erro ao buscar forma de pagamento", e);
+        return [];
+    }
 });
 
 ipcMain.handle("get-tipo-pagamento", () => {
-	try {
-		const query = `
+    try {
+        const query = `
 		SELECT 
 			id,
 			tipo_pagamento 
 		FROM 
 			tabTipoPagamento`;
 
-		const tipo_pagamento = db.prepare(query).all();
+        const tipo_pagamento = db.prepare(query).all();
 
-		return tipo_pagamento;
-	} catch (e) {
-		console.error("Erro ao buscar tipo de pagamento", e);
-		return [];
-	}
+        return tipo_pagamento;
+    } catch (e) {
+        console.error("Erro ao buscar tipo de pagamento", e);
+        return [];
+    }
 });
 
 ipcMain.handle("get-status-despesa", () => {
-	try {
-		const query = `
+    try {
+        const query = `
 		SELECT 
 			id,
 			status_despesa 
 		FROM 
 			tabStatusDespesa`;
 
-		const status_despesa = db.prepare(query).all();
+        const status_despesa = db.prepare(query).all();
 
-		return status_despesa;
-	} catch (e) {
-		console.error("Erro ao buscar status despesa", e);
-		return [];
-	}
+        return status_despesa;
+    } catch (e) {
+        console.error("Erro ao buscar status despesa", e);
+        return [];
+    }
 });
