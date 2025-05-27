@@ -1,88 +1,214 @@
-<section id="funcionario">
-    <div id="imagem-funcionario-wrapper">
-        <div>
-            <button id="return">Return</button>
-        </div>
-        <img
-            src="./public/img/person.png"
-            alt="Imagem funcionario"
-            id="imagem-funcionario"
-        />
+<!-- <section id="funcionario">
+    <div id="controllers">
+        <button id="return">Return</button>
+        <button id="return">Save</button>
+    </div>
+    <div id="funcionario-wrapper">
+        <div id="imagem-funcionario-wrapper">
+            <img
+                src="./public/img/person.png"
+                alt="Imagem funcionario"
+                id="imagem-funcionario"
+            />
 
-        <div>
-            <button id="add-imagem">Add</button>
-            <button id="delete-imagem">Dell</button>
+            <div>
+                <button id="add-imagem">Add</button>
+                <button id="delete-imagem">Dell</button>
+            </div>
+        </div>
+        <div id="informacoes-funcionario">
+            <form action="">
+                <input type="text" placeholder="nome" name="nome" id="nome" />
+
+                <select name="sexo" id="sexo">
+                    <option value="" disabled selected>Sexo</option>
+                    <option value="1">Feminino</option>
+                    <option value="2">Masculino</option>
+                </select>
+
+                <input type="text" placeholder="CPF" name="cpf" id="cpf" />
+
+                <input
+                    type="date"
+                    placeholder="data_nascimento"
+                    name="data_nascimento"
+                    id="data_nascimento"
+                />
+
+                <input
+                    type="text"
+                    placeholder="Contato"
+                    name="contato"
+                    id="contato"
+                />
+
+                <input
+                    type="text"
+                    placeholder="Endereço"
+                    name="endereco"
+                    id="endereco"
+                />
+
+                <input type="text" placeholder="CEP" name="cep" id="cep" />
+
+                <input
+                    type="text"
+                    placeholder="E-mail"
+                    name="email"
+                    id="email"
+                />
+
+                <input
+                    type="text"
+                    placeholder="Status"
+                    name="status_funcionario"
+                    id="status_funcionario"
+                />
+
+                <input
+                    type="text"
+                    placeholder="Banco"
+                    name="banco"
+                    id="banco"
+                />
+
+                <input
+                    type="text"
+                    placeholder="Agência"
+                    name="agencia"
+                    id="agencia"
+                />
+
+                <input
+                    type="text"
+                    placeholder="Conta"
+                    name="conta"
+                    id="conta"
+                />
+
+                <select name="vinculo" id="vinculo">
+                    <option value="" disabled selected>Vinculo</option>
+                    <option value="1">CLT</option>
+                    <option value="2">PJ</option>
+                </select>
+            </form>
+            <div>
+                <button>Add</button>
+                <button>Edit</button>
+                <button>Remove</button>
+            </div>
+            <div id="table-despesas-funcionario-wrapper">
+                <table id="despesas-funcionario"></table>
+            </div>
+            <button>Save</button>
         </div>
     </div>
-    <div id="informacoes-funcionario">
+</section> -->
+
+<section id="funcionario-modal-content">
+    <div id="close-modal-funcionario">
+        <button id="btn-close-modal-funcionario">X</button>
+    </div>
+    <div>
         <form action="">
-            <input type="text" placeholder="nome" name="nome" id="nome" />
+            <div id="imagem-funcionario-wrapper">
+                <img
+                    src="./public/img/person.png"
+                    alt="Imagem funcionario"
+                    id="imagem-funcionario"
+                />
 
-            <select name="sexo" id="sexo">
-                <option value="" disabled selected>Sexo</option>
-                <option value="1">Feminino</option>
-                <option value="2">Masculino</option>
-            </select>
+                <div>
+                    <button id="add-imagem">Add</button>
+                    <button id="delete-imagem">Dell</button>
+                </div>
+            </div>
+            <div>
+                <input type="text" placeholder="nome" name="nome" id="nome" />
 
-            <input type="text" placeholder="CPF" name="cpf" id="cpf" />
+                <select name="sexo" id="sexo">
+                    <option value="" disabled selected>Sexo</option>
+                    <option value="1">Feminino</option>
+                    <option value="2">Masculino</option>
+                </select>
 
-            <input
-                type="date"
-                placeholder="data_nascimento"
-                name="data_nascimento"
-                id="data_nascimento"
-            />
+                <input type="text" placeholder="CPF" name="cpf" id="cpf" />
 
-            <input
-                type="text"
-                placeholder="Contato"
-                name="contato"
-                id="contato"
-            />
+                <input
+                    type="date"
+                    placeholder="data_nascimento"
+                    name="data_nascimento"
+                    id="data_nascimento"
+                />
 
-            <input
-                type="text"
-                placeholder="Endereço"
-                name="endereco"
-                id="endereco"
-            />
+                <input
+                    type="text"
+                    placeholder="Contato"
+                    name="contato"
+                    id="contato"
+                />
 
-            <input type="text" placeholder="CEP" name="cep" id="cep" />
+                <input
+                    type="text"
+                    placeholder="Endereço"
+                    name="endereco"
+                    id="endereco"
+                />
 
-            <input type="text" placeholder="E-mail" name="email" id="email" />
+                <input type="text" placeholder="CEP" name="cep" id="cep" />
 
-            <input
-                type="text"
-                placeholder="Status"
-                name="status_funcionario"
-                id="status_funcionario"
-            />
+                <input
+                    type="text"
+                    placeholder="E-mail"
+                    name="email"
+                    id="email"
+                />
 
-            <input type="text" placeholder="Banco" name="banco" id="banco" />
+                <input
+                    type="text"
+                    placeholder="Status"
+                    name="status_funcionario"
+                    id="status_funcionario"
+                />
 
-            <input
-                type="text"
-                placeholder="Agência"
-                name="agencia"
-                id="agencia"
-            />
+                <input
+                    type="text"
+                    placeholder="Banco"
+                    name="banco"
+                    id="banco"
+                />
 
-            <input type="text" placeholder="Conta" name="conta" id="conta" />
+                <input
+                    type="text"
+                    placeholder="Agência"
+                    name="agencia"
+                    id="agencia"
+                />
 
-            <select name="vinculo" id="vinculo">
-                <option value="" disabled selected>Vinculo</option>
-                <option value="1">CLT</option>
-                <option value="2">PJ</option>
-            </select>
+                <input
+                    type="text"
+                    placeholder="Conta"
+                    name="conta"
+                    id="conta"
+                />
+
+                <select name="vinculo" id="vinculo">
+                    <option value="" disabled selected>Vinculo</option>
+                    <option value="1">CLT</option>
+                    <option value="2">PJ</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">Save</button>
+            </div>
         </form>
+    </div>
+    <div>
         <div>
             <button>Add</button>
             <button>Edit</button>
             <button>Remove</button>
         </div>
-        <div id="table-despesas-funcionario-wrapper">
-            <table id="despesas-funcionario"></table>
-        </div>
-        <button>Save</button>
+        <table></table>
     </div>
 </section>

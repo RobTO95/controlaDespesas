@@ -4,9 +4,23 @@ import SelectInterativo from "../models/SelectInterativo.js";
 export async function openFuncionarios() {
     const btnUpdate = document.getElementById("update");
     btnUpdate.addEventListener("click", carregarFuncionarios);
+    const btnCloseModalFuncionario = document.getElementById(
+        "close-modal-funcionario"
+    );
+    const modalFuncionario = document.getElementById(
+        "funcionario-modal-wrapper"
+    );
+    function openModalFuncionario() {
+        modalFuncionario.style.display = "flex";
+    }
+    function closeModalFuncionario() {
+        modalFuncionario.style.display = "none";
+    }
+
     const btnAdd = document.getElementById("add");
     const btnEdit = document.getElementById("edit");
     const btnDelete = document.getElementById("delete");
+
     const tabela = new TabelaInterativa(
         document.getElementById("table-funcionarios")
     );
@@ -35,5 +49,17 @@ export async function openFuncionarios() {
                 console.error("Erro ao excluir funcionario:", error);
             }
         }
+    });
+
+    btnCloseModalFuncionario.addEventListener("click", closeModalFuncionario);
+    window.addEventListener("click", (e) => {
+        if (e.target === modalFuncionario) closeModalFuncionario();
+    });
+
+    btnAdd.addEventListener("click", () => {
+        openModalFuncionario();
+    });
+    btnEdit.addEventListener("click", () => {
+        openModalFuncionario();
     });
 }
