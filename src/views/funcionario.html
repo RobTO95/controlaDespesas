@@ -105,12 +105,13 @@
     </div>
 </section> -->
 
-<section id="funcionario-modal-content">
-    <div id="close-modal-funcionario">
-        <button id="btn-close-modal-funcionario">X</button>
-    </div>
-    <div>
-        <form action="">
+<section id="funcionario-modal">
+    <div id="funcionario-modal-content">
+        <div id="close-modal-funcionario-wrapper">
+            <span id="close-modal-funcionario" class="close">&times;</span>
+            <!-- <button id="btn-close-modal-funcionario">X</button> -->
+        </div>
+        <div id="funcionario-wrapper">
             <div id="imagem-funcionario-wrapper">
                 <img
                     src="./public/img/person.png"
@@ -123,92 +124,160 @@
                     <button id="delete-imagem">Dell</button>
                 </div>
             </div>
-            <div>
-                <input type="text" placeholder="nome" name="nome" id="nome" />
+            <form id="form-funcionario" action="">
+                <div id="info-funcionario-wrapper">
+                    <input
+                        type="text"
+                        placeholder="nome"
+                        name="nome"
+                        id="nome"
+                    />
 
-                <select name="sexo" id="sexo">
-                    <option value="" disabled selected>Sexo</option>
-                    <option value="1">Feminino</option>
-                    <option value="2">Masculino</option>
-                </select>
+                    <select name="sexo" id="sexo">
+                        <option value="" disabled selected>Sexo</option>
+                        <option value="1">Feminino</option>
+                        <option value="2">Masculino</option>
+                    </select>
 
-                <input type="text" placeholder="CPF" name="cpf" id="cpf" />
+                    <input type="text" placeholder="CPF" name="cpf" id="cpf" />
 
-                <input
-                    type="date"
-                    placeholder="data_nascimento"
-                    name="data_nascimento"
-                    id="data_nascimento"
-                />
+                    <input
+                        type="date"
+                        placeholder="data_nascimento"
+                        name="data_nascimento"
+                        id="data_nascimento"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Contato"
-                    name="contato"
-                    id="contato"
-                />
+                    <input
+                        type="text"
+                        placeholder="Contato"
+                        name="contato"
+                        id="contato"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Endereço"
-                    name="endereco"
-                    id="endereco"
-                />
+                    <input
+                        type="text"
+                        placeholder="Endereço"
+                        name="endereco"
+                        id="endereco"
+                    />
 
-                <input type="text" placeholder="CEP" name="cep" id="cep" />
+                    <input type="text" placeholder="CEP" name="cep" id="cep" />
 
-                <input
-                    type="text"
-                    placeholder="E-mail"
-                    name="email"
-                    id="email"
-                />
+                    <input
+                        type="text"
+                        placeholder="E-mail"
+                        name="email"
+                        id="email"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Status"
-                    name="status_funcionario"
-                    id="status_funcionario"
-                />
+                    <input
+                        type="text"
+                        placeholder="Status"
+                        name="status_funcionario"
+                        id="status_funcionario"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Banco"
-                    name="banco"
-                    id="banco"
-                />
+                    <input
+                        type="text"
+                        placeholder="Banco"
+                        name="banco"
+                        id="banco"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Agência"
-                    name="agencia"
-                    id="agencia"
-                />
+                    <input
+                        type="text"
+                        placeholder="Agência"
+                        name="agencia"
+                        id="agencia"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Conta"
-                    name="conta"
-                    id="conta"
-                />
+                    <input
+                        type="text"
+                        placeholder="Conta"
+                        name="conta"
+                        id="conta"
+                    />
 
-                <select name="vinculo" id="vinculo">
-                    <option value="" disabled selected>Vinculo</option>
-                    <option value="1">CLT</option>
-                    <option value="2">PJ</option>
-                </select>
-            </div>
-            <div>
-                <button type="submit">Save</button>
-            </div>
-        </form>
-    </div>
-    <div>
-        <div>
-            <button>Add</button>
-            <button>Edit</button>
-            <button>Remove</button>
+                    <select name="vinculo" id="vinculo">
+                        <option value="" disabled selected>Vinculo</option>
+                        <option value="1">CLT</option>
+                        <option value="2">PJ</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">Save</button>
+                </div>
+            </form>
         </div>
-        <table></table>
+        <div id="table-funcionario-wrapper">
+            <div id="table-funcionario-controls">
+                <button>Add</button>
+                <button>Edit</button>
+                <button>Dell</button>
+            </div>
+            <table id="table-funcionario">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Valor R$</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Descrição despesa 1</td>
+                        <td>Lazer</td>
+                        <td>100,00</td>
+                        <td>02/05/2025</td>
+                        <td>Pendente</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Descrição despesa 1</td>
+                        <td>Lazer</td>
+                        <td>100,00</td>
+                        <td>02/05/2025</td>
+                        <td>Pendente</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Descrição despesa 1</td>
+                        <td>Lazer</td>
+                        <td>100,00</td>
+                        <td>02/05/2025</td>
+                        <td>Pendente</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Descrição despesa 1</td>
+                        <td>Lazer</td>
+                        <td>100,00</td>
+                        <td>02/05/2025</td>
+                        <td>Pendente</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Descrição despesa 1</td>
+                        <td>Lazer</td>
+                        <td>100,00</td>
+                        <td>02/05/2025</td>
+                        <td>Pendente</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Descrição despesa 1</td>
+                        <td>Lazer</td>
+                        <td>100,00</td>
+                        <td>02/05/2025</td>
+                        <td>Pendente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>

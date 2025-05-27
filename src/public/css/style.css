@@ -218,8 +218,17 @@ tr.selected:nth-child(even) {
     float: right;
     font-size: 24px;
     cursor: pointer;
+    height: 24px;
+    width: 24px;
+    padding: 5px;
+    align-items: center;
+    text-align: center;
+    background: var(--b1-2-color);
+    border-radius: 20%;
 }
-
+.close:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
 .modal-content form .box-text {
     height: 4rem;
     max-width: calc(100% - 30px);
