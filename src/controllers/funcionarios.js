@@ -2,7 +2,33 @@ import TabelaInterativa from "../models/TabelaInterativa.js";
 import SelectInterativo from "../models/SelectInterativo.js";
 
 export async function openFuncionarios() {
+    /* -------------------------- 🏷️ Variáveis Globais -------------------------- */
     let funcionarioCurrent;
+
+    // Dados dos selects
+    let statusFuncionario;
+    let sexo;
+    let vinculo;
+
+    // Selects
+    const selectStatusFilter = new SelectInterativo(
+        document.getElementById("status_funcionario_filter")
+    );
+
+    async function carregarSelects() {
+        sexo = await window.api.invoke("get-sexo");
+        vinculo = await window.api.invoke("get-vinculo-funcionario");
+        statusFuncionario = await window.api.invoke("get-status-funcionario");
+        selectStatusFilter.load(
+            statusFuncionario,
+            "id",
+            "status_funcionario",
+            true,
+            "Status"
+        );
+    }
+    carregarSelects();
+
     const btnUpdate = document.getElementById("update");
     const btnAdd = document.getElementById("add");
     const btnEdit = document.getElementById("edit");
