@@ -16,10 +16,12 @@
         <table id="table-funcionarios"></table>
     </div>
 </section>
-<div id="funcionario-modal-wrapper">
+
+<!-- modal funcionario >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<section id="funcionario-modal">
     <div id="funcionario-modal-content">
-        <div id="close-wrapper">
-            <button id="close-modal-funcionario">X</button>
+        <div id="close-modal-funcionario-wrapper">
+            <span id="close-modal-funcionario" class="close">&times;</span>
         </div>
         <div id="funcionario-wrapper">
             <div id="imagem-funcionario-wrapper">
@@ -34,48 +36,59 @@
                     <button id="delete-imagem">Dell</button>
                 </div>
             </div>
-            <div id="informacoes-funcionario">
-                <form action="">
-                    <div>
+            <form id="form-funcionario" action="">
+                <div id="info-funcionario-wrapper">
+                    <div class="row">
                         <input
                             type="text"
                             placeholder="nome"
                             name="nome"
                             id="nome"
+                            class="col-75"
                         />
-
-                        <select name="sexo" id="sexo">
+                        <select name="sexo" id="sexo" class="col-25">
                             <option value="" disabled selected>Sexo</option>
                             <option value="1">Feminino</option>
                             <option value="2">Masculino</option>
                         </select>
-
+                    </div>
+                    <div class="row">
                         <input
                             type="text"
                             placeholder="CPF"
                             name="cpf"
                             id="cpf"
+                            class="col-25"
                         />
-
                         <input
                             type="date"
                             placeholder="data_nascimento"
                             name="data_nascimento"
                             id="data_nascimento"
+                            class="col-15"
                         />
-
                         <input
                             type="text"
                             placeholder="Contato"
                             name="contato"
                             id="contato"
+                            class="col-15"
                         />
-
+                        <input
+                            type="text"
+                            placeholder="E-mail"
+                            name="email"
+                            id="email"
+                            class="col-45"
+                        />
+                    </div>
+                    <div class="row">
                         <input
                             type="text"
                             placeholder="Endereço"
                             name="endereco"
                             id="endereco"
+                            class="col-75"
                         />
 
                         <input
@@ -83,27 +96,16 @@
                             placeholder="CEP"
                             name="cep"
                             id="cep"
+                            class="col-25"
                         />
-
-                        <input
-                            type="text"
-                            placeholder="E-mail"
-                            name="email"
-                            id="email"
-                        />
-
-                        <input
-                            type="text"
-                            placeholder="Status"
-                            name="status_funcionario"
-                            id="status_funcionario"
-                        />
-
+                    </div>
+                    <div class="row">
                         <input
                             type="text"
                             placeholder="Banco"
                             name="banco"
                             id="banco"
+                            class="col-33"
                         />
 
                         <input
@@ -111,6 +113,7 @@
                             placeholder="Agência"
                             name="agencia"
                             id="agencia"
+                            class="col-33"
                         />
 
                         <input
@@ -118,172 +121,103 @@
                             placeholder="Conta"
                             name="conta"
                             id="conta"
+                            class="col-33"
                         />
-
-                        <select name="vinculo" id="vinculo">
+                    </div>
+                    <div class="row">
+                        <select
+                            name="status_funcionario"
+                            id="status_funcionario"
+                            class="col-25"
+                        >
+                            <option value="" disabled selected>Status</option>
+                            <option value="1">Ativo</option>
+                            <option value="2">Inativo</option>
+                        </select>
+                        <select name="vinculo" id="vinculo" class="col-25">
                             <option value="" disabled selected>Vinculo</option>
                             <option value="1">CLT</option>
                             <option value="2">PJ</option>
                         </select>
                     </div>
-                    <div>
-                        <button>Add</button>
-                        <button>Edit</button>
-                        <button>Remove</button>
-                    </div>
-                    <div id="table-despesas-funcionario-wrapper">
-                        <table id="despesas-funcionario">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Descrição</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Descrição 1</td>
-                                    <td>R$ 100,00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="save-wrapper">
-                        <button type="submit">Save</button>
-                    </div>
-                </form>
+                </div>
+                <div id="btn-save-funcionario-wrapper">
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+        <div id="table-funcionario-wrapper">
+            <div id="table-wrapper">
+                <table id="table-funcionario">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Descrição</th>
+                            <th>Categoria</th>
+                            <th>Valor R$</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Descrição despesa 1</td>
+                            <td>Lazer</td>
+                            <td>100,00</td>
+                            <td>02/05/2025</td>
+                            <td>Pendente</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Descrição despesa 1</td>
+                            <td>Lazer</td>
+                            <td>100,00</td>
+                            <td>02/05/2025</td>
+                            <td>Pendente</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Descrição despesa 1</td>
+                            <td>Lazer</td>
+                            <td>100,00</td>
+                            <td>02/05/2025</td>
+                            <td>Pendente</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Descrição despesa 1</td>
+                            <td>Lazer</td>
+                            <td>100,00</td>
+                            <td>02/05/2025</td>
+                            <td>Pendente</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Descrição despesa 1</td>
+                            <td>Lazer</td>
+                            <td>100,00</td>
+                            <td>02/05/2025</td>
+                            <td>Pendente</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Descrição despesa 1</td>
+                            <td>Lazer</td>
+                            <td>100,00</td>
+                            <td>02/05/2025</td>
+                            <td>Pendente</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="table-funcionario-controls">
+                <button>Add</button>
+                <button>Edit</button>
+                <button>Dell</button>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- modal funcionario <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->

@@ -7,9 +7,8 @@ export async function openFuncionarios() {
     const btnCloseModalFuncionario = document.getElementById(
         "close-modal-funcionario"
     );
-    const modalFuncionario = document.getElementById(
-        "funcionario-modal-wrapper"
-    );
+
+    const modalFuncionario = document.getElementById("funcionario-modal");
     function openModalFuncionario() {
         modalFuncionario.style.display = "flex";
     }
@@ -51,7 +50,10 @@ export async function openFuncionarios() {
         }
     });
 
-    btnCloseModalFuncionario.addEventListener("click", closeModalFuncionario);
+    btnCloseModalFuncionario.addEventListener("click", () => {
+        closeModalFuncionario();
+    });
+
     window.addEventListener("click", (e) => {
         if (e.target === modalFuncionario) closeModalFuncionario();
     });

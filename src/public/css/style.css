@@ -17,6 +17,12 @@
         rgba(222, 251, 213, 1) 50%,
         rgba(238, 253, 234, 1) 100%
     );
+    --g3-color: linear-gradient(
+        0deg,
+        rgb(189, 250, 245) 0%,
+        rgb(213, 251, 249) 50%,
+        rgb(234, 253, 253) 100%
+    );
     --white-color: #fff;
     --black-color: #000;
 }
@@ -108,6 +114,38 @@ nav div {
     flex-direction: row;
     justify-content: space-between;
     gap: 1rem;
+}
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    width: 100%;
+}
+.row > .col-100 {
+    width: 100%;
+}
+.row > .col-75 {
+    width: 75%;
+}
+.row > .col-50 {
+    width: 50%;
+}
+.row > .col-45 {
+    width: 45%;
+}
+.row > .col-35 {
+    width: 35%;
+}
+.row > .col-33 {
+    width: calc(100% / 3);
+}
+.row > .col-25 {
+    width: 25%;
+}
+.row > .col-15 {
+    width: 15%;
 }
 
 /* Table >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
