@@ -10,8 +10,8 @@ const db = new Database(dbPath, { verbose: console.log });
 
 function createWindow() {
     const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1100,
+        height: 650,
         icon: "./src/public/img/logo.png",
         autoHideMenuBar: true,
         webPreferences: {

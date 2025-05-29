@@ -105,6 +105,10 @@ class Funcionario {
         const db = new Conexao().conn;
         return db.prepare(`SELECT * FROM tabFuncionarios ORDER BY nome`).all();
     }
+
+    static getConexao() {
+        return new Conexao().conn;
+    }
 }
 
 module.exports = { Funcionario };

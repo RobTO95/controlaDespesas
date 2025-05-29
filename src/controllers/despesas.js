@@ -21,6 +21,7 @@ export async function openDespesas() {
         }));
 
         const colunasCustom = {
+            id: "ID",
             descricao: "Descrição",
             categoria: "Categoria",
             valor: "Valor (R$)",
