@@ -36,13 +36,14 @@ export async function openFuncionarios() {
 
     // imagem funcionario
     const imgFuncionario = document.getElementById("imagem-funcionario");
+    imgFuncionario.addEventListener("dblclick", addImage);
     // <button id="add-imagem">Add</button>
     const btnAddImg = document.getElementById("add-imagem");
     btnAddImg.addEventListener("click", addImage);
 
     async function addImage() {
         const imgPath = await window.api.invoke("funcionario:get-image");
-        imgFuncionario.src = imgPath;
+        imgFuncionario.src = imgPath ? imgPath : imgFuncionario.src;
     }
 
     // <button id="delete-imagem">Remove</button>
@@ -135,7 +136,7 @@ export async function openFuncionarios() {
             }
             await carregarFuncionarios();
             closeModalFuncionario();
-            imgFuncionario.src = "";
+            imgFuncionario.src = "../src/img/person.png";
             formFuncionario.reset();
         } catch (error) {
             console.error("Erro ao salvar funcionario:", error);
@@ -180,9 +181,12 @@ export async function openFuncionarios() {
 
     function openModalFuncionario() {
         carregarSelectsModal();
+        imgFuncionario.src = "../src/public/img/person.png";
         modalFuncionario.style.display = "flex";
     }
     function closeModalFuncionario() {
+        delete formFuncionario.dataset.editingId;
+        formFuncionario.reset();
         imgFuncionario.src = "../src/public/img/person.png";
         modalFuncionario.style.display = "none";
     }
