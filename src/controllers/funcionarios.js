@@ -33,9 +33,34 @@ export async function openFuncionarios() {
     // Modal ---------------------------------------------------------
     const modalFuncionario = document.getElementById("funcionario-modal");
     const formFuncionario = document.getElementById("form-funcionario");
+
+    // imagem funcionario
     const imgFuncionario = document.getElementById("imagem-funcionario");
+    // <button id="add-imagem">Add</button>
+    const btnAddImg = document.getElementById("add-imagem");
+    btnAddImg.addEventListener("click", addImage);
+
+    async function addImage() {
+        const imgPath = await window.api.invoke("funcionario:get-image");
+        imgFuncionario.src = imgPath;
+    }
+
+    // <button id="delete-imagem">Remove</button>
+    const btnDeleteImg = document.getElementById("delete-imagem");
+    btnDeleteImg.addEventListener("click", removeImage);
+    function removeImage() {
+        imgFuncionario.src = "./public/img/person.png";
+    }
+
     const btnCloseModalFuncionario = document.getElementById(
         "close-modal-funcionario"
+    );
+    const selectSexoModal = document.getElementById("sexo-modal-funcionario");
+    const selectStatusModal = document.getElementById(
+        "status-modal-funcionario"
+    );
+    const selectVinculoModal = document.getElementById(
+        "vinculo-modal-funcionario"
     );
 
     /* -------------------------- EVENTOS -------------------------- */
@@ -89,27 +114,34 @@ export async function openFuncionarios() {
         if (e.target === modalFuncionario) closeModalFuncionario();
     });
 
-    formFuncionario.addEventListener("submit", async (event) => {
+    formFuncionario.addEventListener("submit", salvarFuncionario);
+
+    /* -------------------------- FUNÇÕES -------------------------- */
+    async function salvarFuncionario(event) {
         event.preventDefault();
         const formData = new FormData(formFuncionario);
         const funcionarioData = Object.fromEntries(formData.entries());
+        funcionarioData.imagem = imgFuncionario.src;
         try {
             if (formFuncionario.dataset.editingId) {
                 funcionarioData.id = formFuncionario.dataset.editingId;
                 await window.api.invoke("funcionario:update", funcionarioData);
                 delete formFuncionario.dataset.editingId;
             } else {
-                await window.api.invoke("funcionario:insert", funcionarioData);
+                const id = await window.api.invoke(
+                    "funcionario:insert",
+                    funcionarioData
+                );
             }
             await carregarFuncionarios();
             closeModalFuncionario();
+            imgFuncionario.src = "";
             formFuncionario.reset();
         } catch (error) {
             console.error("Erro ao salvar funcionario:", error);
         }
-    });
+    }
 
-    /* -------------------------- FUNÇÕES -------------------------- */
     async function carregarSelects() {
         sexo = await window.api.invoke("get-sexo");
         vinculo = await window.api.invoke("get-vinculo-funcionario");
@@ -123,14 +155,35 @@ export async function openFuncionarios() {
         );
     }
     carregarSelects();
+
     async function carregarSelectsModal() {
-        // IMPLEMENTAR O CARREGAMENTO DOS SELECTS DO MODAL
+        const sexoModal = new SelectInterativo(selectSexoModal);
+        const statusModal = new SelectInterativo(selectStatusModal);
+        const vinculoModal = new SelectInterativo(selectVinculoModal);
+
+        sexoModal.load(sexo, "id", "sexo", true, "Sexo");
+        statusModal.load(
+            statusFuncionario,
+            "id",
+            "status_funcionario",
+            true,
+            "Status"
+        );
+        vinculoModal.load(
+            vinculo,
+            "id",
+            "vinculo_funcionario",
+            true,
+            "Vinculo"
+        );
     }
 
     function openModalFuncionario() {
+        carregarSelectsModal();
         modalFuncionario.style.display = "flex";
     }
     function closeModalFuncionario() {
+        imgFuncionario.src = "../src/public/img/person.png";
         modalFuncionario.style.display = "none";
     }
 
@@ -182,8 +235,8 @@ export async function openFuncionarios() {
             formFuncionario.elements["conta"].value = funcionario.conta;
             formFuncionario.elements["vinculo"].value = funcionario.vinculo;
             imgFuncionario.src = funcionario.imagem
-                ? funcionario.imagem
-                : "./public/img/person.png";
+                ? `../${funcionario.imagem}?t=${Date.now()}`
+                : "../src/public/img/person.png";
             formFuncionario.dataset.editingId = id;
         } catch (error) {
             console.error("Erro ao carregar funcionario para edição:", error);

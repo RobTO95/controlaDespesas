@@ -30,10 +30,9 @@
                     alt="Imagem funcionario"
                     id="imagem-funcionario"
                 />
-
                 <div>
                     <button id="add-imagem">Add</button>
-                    <button id="delete-imagem">Dell</button>
+                    <button id="delete-imagem">Remove</button>
                 </div>
             </div>
             <form id="form-funcionario" action="">
@@ -47,11 +46,12 @@
                             class="col-75"
                             required
                         />
-                        <select name="sexo" id="sexo" class="col-25" required>
-                            <option value="" disabled selected>Sexo</option>
-                            <option value="1">Feminino</option>
-                            <option value="2">Masculino</option>
-                        </select>
+                        <select
+                            name="sexo"
+                            id="sexo-modal-funcionario"
+                            class="col-25"
+                            required
+                        ></select>
                     </div>
                     <div class="row">
                         <input
@@ -129,24 +129,16 @@
                     <div class="row">
                         <select
                             name="status_funcionario"
-                            id="status_funcionario"
+                            id="status-modal-funcionario"
                             class="col-25"
                             required
-                        >
-                            <option value="" disabled selected>Status</option>
-                            <option value="1">Ativo</option>
-                            <option value="2">Inativo</option>
-                        </select>
+                        ></select>
                         <select
                             name="vinculo"
-                            id="vinculo"
+                            id="vinculo-modal-funcionario"
                             class="col-25"
                             required
-                        >
-                            <option value="" disabled selected>Vinculo</option>
-                            <option value="1">CLT</option>
-                            <option value="2">PJ</option>
-                        </select>
+                        ></select>
                     </div>
                 </div>
                 <div id="btn-save-funcionario-wrapper" class="row">

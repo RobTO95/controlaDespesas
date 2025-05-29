@@ -7,6 +7,7 @@ const Database = require("better-sqlite3");
 // Configurando o banco
 const dbPath = path.join(__dirname, "src", "data", "data.db"); // ajuste o caminho se necessário
 const db = new Database(dbPath, { verbose: console.log });
+// const db = new Database(dbPath);
 
 function createWindow() {
     const win = new BrowserWindow({

@@ -1,6 +1,10 @@
 // ./src/ipc/funcionarioIpc.js >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const { ipcMain } = require("electron");
+const { ipcMain, dialog } = require("electron");
 const { Funcionario } = require("../models/Funcionario.js");
+const {
+    copyImageToAppFolder,
+    deleteImageOnAppFolder,
+} = require("../utils/fileManager.js");
 
 ipcMain.handle("funcionario:get", (event, id) => {
     const funcionario = new Funcionario(id);
@@ -10,20 +14,24 @@ ipcMain.handle("funcionario:get", (event, id) => {
 
 ipcMain.handle("funcionario:delete", (event, id) => {
     const funcionario = new Funcionario(id);
+    deleteImageOnAppFolder(id);
     funcionario.delete();
     return true;
 });
 
-ipcMain.handle("funcionario:insert", (event, data) => {
-    const novoFuncionario = new Funcionario();
-    Object.assign(novoFuncionario, data);
-    novoFuncionario.insert();
-    return novoFuncionario.id;
+ipcMain.handle("funcionario:insert", async (event, data) => {
+    const funcionario = new Funcionario();
+    Object.assign(funcionario, data);
+    funcionario.insert();
+    funcionario.imagem = await setImage(funcionario.imagem, funcionario.id);
+    funcionario.update();
+    return funcionario.id;
 });
 
-ipcMain.handle("funcionario:update", (event, data) => {
+ipcMain.handle("funcionario:update", async (event, data) => {
     const funcionario = new Funcionario(data.id);
     Object.assign(funcionario, data);
+    funcionario.imagem = await setImage(funcionario.imagem, funcionario.id);
     funcionario.update();
     return true;
 });
@@ -62,3 +70,17 @@ ipcMain.handle("get-funcionarios:filter", (event, filters) => {
         console.error("Erro ao filtrar funcionarios", error);
     }
 });
+
+ipcMain.handle("funcionario:get-image", async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+        properties: ["openFile"],
+        filters: [{ name: "Images", extensions: ["jpg", "png", "gif"] }],
+    });
+    if (canceled || filePaths.length === 0) return null;
+    return filePaths[0]; // Retorna o caminho da imagem selecionada
+});
+
+async function setImage(imagePath, id) {
+    const destPath = await copyImageToAppFolder(imagePath, id);
+    return destPath;
+}
