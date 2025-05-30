@@ -89,6 +89,7 @@ export async function openFuncionarios() {
             return alert("Selecione uma despesa para editar.");
         } else {
             preencherFormularioFuncionario(idSelecionado);
+            carregarPagamentosFuncionario(idSelecionado);
             openModalFuncionario();
         }
     });
@@ -245,5 +246,28 @@ export async function openFuncionarios() {
         } catch (error) {
             console.error("Erro ao carregar funcionario para edição:", error);
         }
+    }
+
+    async function carregarPagamentosFuncionario(id) {
+        const tabelaDespesaFuncionario =
+            document.getElementById("table-funcionario");
+        const tabelaPagamentosInterativa = new TabelaInterativa(
+            tabelaDespesaFuncionario
+        );
+        const pagamentos = await window.api.invoke(
+            "despesa-funcionario:get-all-on-funcionario",
+            id
+        );
+        const colunasCustom = {
+            id: "ID",
+            descricao: "Descrição",
+            categoria: "Categoria",
+            valor: "Valor (R$)",
+            data: "Data",
+            status_despesa: "Status",
+        };
+
+        console.log(pagamentos);
+        tabelaPagamentosInterativa.load(pagamentos, colunasCustom);
     }
 }

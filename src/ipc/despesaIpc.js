@@ -4,7 +4,8 @@ const { Despesa } = require("../models/Despesa.js");
 
 // Handler para buscar todas as despesas
 ipcMain.handle("despesa:getAll", () => {
-    return Despesa.getAll(); // Puxa todas as despesas do banco
+    const despesas = Despesa.getAll();
+    return despesas; // Puxa todas as despesas do banco
 });
 
 // Handler para buscar uma despesa por ID

@@ -30,9 +30,6 @@
     min-width: 1000px;
     min-height: 550px;
 }
-#funcionario-modal-content * {
-    border: 1px solid red;
-}
 
 #close-modal-funcionario-wrapper {
     display: flex;

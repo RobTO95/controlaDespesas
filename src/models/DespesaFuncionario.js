@@ -71,6 +71,28 @@ class DespesaFuncionario {
     }
 
     /**
+     * Busca os dados de despesas a partir do id_funcionario.
+     * @returns {Array<Object>} Lista de todos os registros encontrados.
+     */
+    getDespesaForIdFuncionario() {
+        if (!this.id_funcionario)
+            throw new Error("ID funcionário não definido para busca.");
+
+        const query = `
+        SELECT 
+            d.id, d.descricao, d.categoria, d.valor, d.data, d.status_despesa 
+        FROM 
+            tabDespesasFuncionarios AS df 
+        INNER JOIN 
+            tabDespesas AS d ON df.id_despesa = d.id
+        WHERE 
+            df.id_funcionario=?`;
+
+        const result = this.db.prepare(query).all(this.id_funcionario);
+        return result;
+    }
+
+    /**
      * Obtém uma nova conexão com o banco de dados.
      * @returns {Object} Conexão ativa com o banco de dados.
      */

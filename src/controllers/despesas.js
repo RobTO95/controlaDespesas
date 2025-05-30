@@ -1,5 +1,10 @@
 import TabelaInterativa from "../models/TabelaInterativa.js";
 import SelectInterativo from "../models/SelectInterativo.js";
+import {
+    formatarMoedaBR,
+    formatarDataParaBR,
+    converterDataParaISO,
+} from "../utils/formaters.js";
 
 export async function openDespesas() {
     /* -------------------------- 🏷️ Variáveis Globais -------------------------- */
@@ -18,6 +23,7 @@ export async function openDespesas() {
         const despesasFormatadas = despesas.map((despesa) => ({
             ...despesa,
             data: formatarDataParaBR(despesa.data),
+            valor: formatarMoedaBR(despesa.valor),
         }));
 
         const colunasCustom = {
@@ -31,24 +37,6 @@ export async function openDespesas() {
         tabela.load(despesasFormatadas, colunasCustom);
     }
     carregarDespesas();
-    /* ---------------------- 🏷️ Utilitários de Formatação ---------------------- */
-    function formatarDataParaBR(dataISO) {
-        if (!dataISO) return "";
-        if (dataISO.includes("/")) return dataISO; // Já no formato BR
-        const [ano, mes, dia] = dataISO.substring(0, 10).split("-");
-        return `${dia}/${mes}/${ano}`;
-    }
-
-    function converterDataParaISO(dataBR) {
-        if (!dataBR) return "";
-        if (/^\d{4}-\d{2}-\d{2}$/.test(dataBR)) return dataBR;
-        const [dia, mes, ano] = dataBR.split("/");
-        if (!dia || !mes || !ano) return "";
-        return `${ano.padStart(4, "0")}-${mes.padStart(2, "0")}-${dia.padStart(
-            2,
-            "0"
-        )}`;
-    }
 
     /* ----------------------- 🏷️ Instanciar Selects ------------------------ */
     const selectCategoriaFilter = new SelectInterativo(

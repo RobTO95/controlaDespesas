@@ -6,8 +6,8 @@ const Database = require("better-sqlite3");
 
 // Configurando o banco
 const dbPath = path.join(__dirname, "src", "data", "data.db"); // ajuste o caminho se necessário
-const db = new Database(dbPath, { verbose: console.log });
-// const db = new Database(dbPath);
+// const db = new Database(dbPath, { verbose: console.log });
+const db = new Database(dbPath);
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -39,12 +39,12 @@ app.on("window-all-closed", () => {
     }
 });
 
-// 🔥 Carrega os handlers do IPC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Carrega os handlers do IPC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const despesaIpc = require("./src/ipc/despesaIpc.js");
 const funcionarioIpc = require("./src/ipc/funcionarioIpc.js");
+const despesaFuncionarioIpc = require("./src/ipc/despesaFuncionarioIpc.js");
 
-// comunicação para enviar dados >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+// Comunicação para enviar dados >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ipcMain.handle("get-despesas", () => {
     try {
         const query = `
@@ -58,20 +58,7 @@ ipcMain.handle("get-despesas", () => {
 			tabStatusDespesa AS s ON d.status_despesa = s.id`;
 
         const despesas = db.prepare(query).all();
-
-        // Formata o valor para moeda brasileira
-        const formatter = new Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        });
-
-        // Mapeia as despesas para formatar o valor
-        const despesasFormatadas = despesas.map((d) => ({
-            ...d,
-            valor: formatter.format(d.valor),
-        }));
-
-        return despesasFormatadas;
+        return despesas;
     } catch (e) {
         console.error("Erro ao buscar despesas", e);
         return [];
