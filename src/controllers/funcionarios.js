@@ -136,7 +136,7 @@ export async function openFuncionarios() {
             }
             await carregarFuncionarios();
             closeModalFuncionario();
-            imgFuncionario.src = "../src/img/person.png";
+            imgFuncionario.src = "./public/img/person.png";
             formFuncionario.reset();
         } catch (error) {
             console.error("Erro ao salvar funcionario:", error);

@@ -20,15 +20,18 @@
 #funcionario-modal-content {
     display: flex;
     flex-direction: column;
-    width: 90%;
-    height: 90%;
-    gap: 0.75rem;
+    width: 90dvw;
+    height: 90dvh;
+    gap: 0.5rem;
     background: var(--g1-color);
     color: var(--b1-1-color);
     padding: 0.75rem 1.25rem 1.25rem 1.25rem;
     border-radius: 0.75rem;
     min-width: 1000px;
     min-height: 550px;
+}
+#funcionario-modal-content * {
+    border: 1px solid red;
 }
 
 #close-modal-funcionario-wrapper {
@@ -54,13 +57,13 @@
     width: 77%;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 #info-funcionario-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 #btn-save-funcionario-wrapper {
     display: flex;
@@ -86,13 +89,18 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    height: 40%;
 }
 
 #table-funcionario-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    border-top: 1px solid var(--b1-2-color);
+    gap: 0.5rem;
+    /* border-top: 1px solid var(--b1-2-color); */
     padding: 0.75rem;
-    height: 40%;
+    height: calc(100% - (40% + 2.5rem + (3 * 0.5rem)));
+}
+
+#table-funcionario-wrapper h2 {
+    margin: 0;
 }
