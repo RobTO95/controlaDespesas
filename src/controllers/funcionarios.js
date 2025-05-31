@@ -232,7 +232,6 @@ export async function openFuncionarios() {
 	async function preencherFormularioFuncionario(id) {
 		try {
 			const funcionario = await window.api.invoke("funcionario:get", id);
-			funcionarioCurrent = funcionario;
 			formFuncionario.elements["nome"].value = funcionario.nome;
 			formFuncionario.elements["sexo"].value = funcionario.sexo;
 			formFuncionario.elements["cpf"].value = funcionario.cpf;
