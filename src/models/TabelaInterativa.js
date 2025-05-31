@@ -1,113 +1,133 @@
 export default class TabelaInterativa {
-    table;
-    data;
-    selectedRowIndex = null;
+	table;
+	data;
+	selectedRowIndex = null;
+	constructor(table) {
+		if (!(table instanceof HTMLTableElement)) {
+			throw new Error("Elemento fornecido não é uma tabela HTML.");
+		}
+		this.table = table;
 
-    constructor(table) {
-        if (!(table instanceof HTMLTableElement)) {
-            throw new Error("Elemento fornecido não é uma tabela HTML.");
-        }
-        this.table = table;
+		// 🎹 Ativar captura do teclado
+		this.table.tabIndex = 0;
+		this.table.addEventListener("keydown", (event) =>
+			this.handleKeyDown(event)
+		);
+	}
 
-        // 🎹 Ativar captura do teclado
-        this.table.tabIndex = 0;
-        this.table.addEventListener("keydown", (event) =>
-            this.handleKeyDown(event)
-        );
-    }
+	load(dados, colunasPersonalizadas = {}) {
+		if (!Array.isArray(dados) || dados.length === 0) {
+			this.clear();
+			this.table.innerHTML =
+				"<thead><tr><th>Nenhum dado encontrado</th></tr></thead>";
+			return;
+		}
 
-    load(dados, colunasPersonalizadas = {}) {
-        if (!Array.isArray(dados) || dados.length === 0) {
-            this.clear();
-            this.table.innerHTML =
-                "<thead><tr><th>Nenhum dado encontrado</th></tr></thead>";
-            return;
-        }
+		this.clear();
+		this.data = dados;
 
-        this.clear();
-        this.data = dados;
+		const colunas = Object.keys(this.data[0]);
+		const thead = this.table.createTHead();
+		const headRow = thead.insertRow();
 
-        const colunas = Object.keys(this.data[0]);
-        const thead = this.table.createTHead();
-        const headRow = thead.insertRow();
+		colunas.forEach((col, index) => {
+			const th = document.createElement("th");
+			th.textContent = colunasPersonalizadas[col] || col;
+			th.dataset.colName = col; // 🏷️ Guardar nome da coluna
+			th.dataset.colIndex = index; // 🏷️ Guardar índice da coluna
+			th.style.cursor = "pointer";
 
-        colunas.forEach((col) => {
-            const th = document.createElement("th");
-            th.textContent = colunasPersonalizadas[col] || col;
-            headRow.appendChild(th);
-        });
+			// 🖱️ Evento de clique no cabeçalho
+			th.addEventListener("click", (event) => {
+				const nomeColuna = event.target.dataset.colName;
+				const indiceColuna = event.target.dataset.colIndex;
 
-        const tbody = this.table.createTBody();
+				// console.log(`Coluna clicada: ${nomeColuna} (índice ${indiceColuna})`);
+				// Opcional: Você pode emitir um evento customizado ou chamar um callback
+				if (this.onColunaClick) {
+					this.onColunaClick(nomeColuna, indiceColuna);
+				}
+			});
 
-        this.data.forEach((obj, index) => {
-            const row = tbody.insertRow();
-            row.dataset.id = obj.id;
-            row.dataset.index = index;
+			headRow.appendChild(th);
+		});
 
-            colunas.forEach((col) => {
-                const cell = row.insertCell();
-                cell.textContent = obj[col] != null ? obj[col] : "";
-            });
+		const tbody = this.table.createTBody();
 
-            // 🖱️ Clique para selecionar/deselecionar
-            row.addEventListener("click", () => {
-                if (row.classList.contains("selected")) {
-                    // Clique para desmarcar
-                    row.classList.remove("selected");
-                    this.selectedRowIndex = null;
-                } else {
-                    // Clique para marcar
-                    this.clearSelection();
-                    row.classList.add("selected");
-                    this.selectedRowIndex = index;
-                }
-            });
-        });
-    }
+		this.data.forEach((obj, index) => {
+			const row = tbody.insertRow();
+			row.dataset.id = obj.id;
+			row.dataset.index = index;
 
-    handleKeyDown(event) {
-        const rows = Array.from(this.table.querySelectorAll("tbody tr"));
-        if (rows.length === 0) return;
+			colunas.forEach((col) => {
+				const cell = row.insertCell();
+				cell.textContent = obj[col] != null ? obj[col] : "";
+			});
 
-        if (event.key === "ArrowUp") {
-            event.preventDefault();
-            if (this.selectedRowIndex === null) {
-                this.selectedRowIndex = 0;
-            } else if (this.selectedRowIndex > 0) {
-                this.selectedRowIndex--;
-            }
-            this.updateSelection(rows);
-        } else if (event.key === "ArrowDown") {
-            event.preventDefault();
-            if (this.selectedRowIndex === null) {
-                this.selectedRowIndex = 0;
-            } else if (this.selectedRowIndex < rows.length - 1) {
-                this.selectedRowIndex++;
-            }
-            this.updateSelection(rows);
-        }
-    }
+			// 🖱️ Clique para selecionar/deselecionar
+			row.addEventListener("click", () => {
+				if (row.classList.contains("selected")) {
+					// Clique para desmarcar
+					row.classList.remove("selected");
+					this.selectedRowIndex = null;
+				} else {
+					// Clique para marcar
+					this.clearSelection();
+					row.classList.add("selected");
+					this.selectedRowIndex = index;
+				}
+			});
+		});
+	}
 
-    updateSelection(rows) {
-        this.clearSelection();
-        const row = rows[this.selectedRowIndex];
-        row.classList.add("selected");
-        row.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
+	handleKeyDown(event) {
+		const rows = Array.from(this.table.querySelectorAll("tbody tr"));
+		if (rows.length === 0) return;
 
-    clear() {
-        this.table.innerHTML = "";
-        this.data = null;
-        this.selectedRowIndex = null;
-    }
+		if (event.key === "ArrowUp") {
+			event.preventDefault();
+			if (this.selectedRowIndex === null) {
+				this.selectedRowIndex = 0;
+			} else if (this.selectedRowIndex > 0) {
+				this.selectedRowIndex--;
+			}
+			this.updateSelection(rows);
+		} else if (event.key === "ArrowDown") {
+			event.preventDefault();
+			if (this.selectedRowIndex === null) {
+				this.selectedRowIndex = 0;
+			} else if (this.selectedRowIndex < rows.length - 1) {
+				this.selectedRowIndex++;
+			}
+			this.updateSelection(rows);
+		}
+	}
 
-    clearSelection() {
-        const selectedRows = this.table.querySelectorAll("tr.selected");
-        selectedRows.forEach((row) => row.classList.remove("selected"));
-    }
+	updateSelection(rows) {
+		this.clearSelection();
+		const row = rows[this.selectedRowIndex];
+		row.classList.add("selected");
+		row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+	}
 
-    getSelectedRowId() {
-        const selectedRow = this.table.querySelector("tr.selected");
-        return selectedRow ? selectedRow.dataset.id : null;
-    }
+	clear() {
+		this.table.innerHTML = "";
+		this.data = null;
+		this.selectedRowIndex = null;
+	}
+
+	clearSelection() {
+		const selectedRows = this.table.querySelectorAll("tr.selected");
+		selectedRows.forEach((row) => row.classList.remove("selected"));
+	}
+
+	getSelectedRowId() {
+		const selectedRow = this.table.querySelector("tr.selected");
+		return selectedRow ? selectedRow.dataset.id : null;
+	}
+
+	// 🔥 Novo recurso: permite definir um callback para clique de coluna
+	setOnColunaClick(callback) {
+		this.onColunaClick = callback;
+	}
 }

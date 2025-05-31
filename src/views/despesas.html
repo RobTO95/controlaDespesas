@@ -3,27 +3,26 @@
 		<input
 			type="text"
 			placeholder="Descrição"
-		/>
-		<input
-			type="text"
-			placeholder="Valor R$"
-		/>
-		<input
-			type="date"
-			placeholder="Data"
+			id="descricao-filter"
 		/>
 		<select
 			name="categoria"
 			id="categoria-filter"
-		>
-			<option
-				value=""
-				disabled
-				selected
-			>
-				Categoria
-			</option>
-		</select>
+		></select>
+		<input
+			type="number"
+			placeholder="Valor R$"
+			id="valor-filter"
+		/>
+		<input
+			type="date"
+			placeholder="Data"
+			id="data-filter"
+		/>
+		<select
+			name="status_despesa"
+			id="status-despesa-filter"
+		></select>
 		<button id="search">Search</button>
 		<button id="clear">Clear</button>
 	</div>

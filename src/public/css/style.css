@@ -37,7 +37,7 @@ body {
 	margin: 0;
 	height: 100dvh;
 	width: 100dvw;
-	min-width: 1100px;
+	min-width: 1200px;
 	min-height: 650px;
 	background: var(--g1-color);
 	font-family: "Roboto", sans-serif;

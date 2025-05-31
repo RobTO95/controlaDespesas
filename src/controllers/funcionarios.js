@@ -1,17 +1,34 @@
 import TabelaInterativa from "../models/TabelaInterativa.js";
 import SelectInterativo from "../models/SelectInterativo.js";
 
-export async function openFuncionarios() {
-	/* -------------------------- 🏷️ Variáveis Globais -------------------------- */
-	let funcionarioCurrent;
+let tabelaColNameClick = "";
+let tabela;
+let statusFuncionario;
+let sexo;
+let vinculo;
 
-	// Dados dos selects
-	let statusFuncionario;
-	let sexo;
-	let vinculo;
-	const tabela = new TabelaInterativa(
-		document.getElementById("table-funcionarios")
-	);
+export async function openFuncionarios() {
+	tabela = new TabelaInterativa(document.getElementById("table-funcionarios"));
+
+	tabela.setOnColunaClick((nomeColuna, indiceColuna) => {
+		// console.log(`Coluna clicada: ${nomeColuna}, índice: ${indiceColuna}`);
+		// Aqui você pode fazer qualquer lógica personalizada (ex: ordenação)
+		const orderBy = {};
+		if (nomeColuna === tabelaColNameClick) {
+			orderBy.order = "DESC";
+			tabelaColNameClick = "";
+		} else {
+			orderBy.order = "ASC";
+			tabelaColNameClick = nomeColuna;
+		}
+		// f.id, f.nome, f.contato, sf.status_funcionario
+		if (nomeColuna === "status_funcionario") {
+			orderBy.name = `sf.${nomeColuna}`;
+		} else {
+			orderBy.name = `f.${nomeColuna}`;
+		}
+		carregarFuncionarios(orderBy);
+	});
 
 	// Botões --------------------------------------------------------
 	const btnUpdate = document.getElementById("update");
@@ -184,7 +201,7 @@ export async function openFuncionarios() {
 		modalFuncionario.style.display = "none";
 	}
 
-	async function carregarFuncionarios() {
+	async function carregarFuncionarios(orderBy = {}) {
 		const filters = {};
 		if (inputNomeFilter.value) {
 			filters.nome = inputNomeFilter.value;
@@ -196,10 +213,10 @@ export async function openFuncionarios() {
 			filters.status_funcionario = selectStatusFilter.value;
 		}
 
-		// const funcionarios = await window.api.getFuncionarios();
 		const funcionarios = await window.api.invoke(
 			"get-funcionarios:filter",
-			filters
+			filters,
+			orderBy
 		);
 
 		const colunasCustom = {

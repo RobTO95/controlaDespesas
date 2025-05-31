@@ -89,7 +89,7 @@ const despesas = [
 		descricao: "Compra supermercado",
 		categoria: 1, // Alimentação
 		valor: 250.5,
-		data: "10/05/2025",
+		data: "2025-05-10",
 		forma_pagamento: 2, // Cartão
 		tipo_pagamento: 1, // à vista
 		status_despesa: 1, // Pago
@@ -99,7 +99,7 @@ const despesas = [
 		descricao: "Passagem de ônibus",
 		categoria: 2, // Transporte
 		valor: 15.75,
-		data: "11/05/2025",
+		data: "2025-05-11",
 		forma_pagamento: 1, // Dinheiro
 		tipo_pagamento: 1,
 		status_despesa: 2, // Pendente
@@ -109,7 +109,7 @@ const despesas = [
 		descricao: "Aluguel apartamento",
 		categoria: 3, // Moradia
 		valor: 1200,
-		data: "01/05/2025",
+		data: "2025-05-01",
 		forma_pagamento: 4, // Boleto
 		tipo_pagamento: 1,
 		status_despesa: 1,
@@ -119,7 +119,7 @@ const despesas = [
 		descricao: "Consulta médica",
 		categoria: 4, // Saúde
 		valor: 300,
-		data: "20/04/2025",
+		data: "2025-04-20",
 		forma_pagamento: 3, // PIX
 		tipo_pagamento: 1,
 		status_despesa: 1,
@@ -129,7 +129,7 @@ const despesas = [
 		descricao: "Curso online",
 		categoria: 6, // Educação
 		valor: 400,
-		data: "05/05/2025",
+		data: "2025-05-05",
 		forma_pagamento: 2,
 		tipo_pagamento: 2, // parcelado
 		status_despesa: 2,
@@ -139,7 +139,7 @@ const despesas = [
 		descricao: "Cinema com amigos",
 		categoria: 7, // Lazer
 		valor: 80,
-		data: "15/05/2025",
+		data: "2025-05-15",
 		forma_pagamento: 1,
 		tipo_pagamento: 1,
 		status_despesa: 1,
@@ -149,7 +149,7 @@ const despesas = [
 		descricao: "Compra roupas",
 		categoria: 8, // Compras
 		valor: 350,
-		data: "18/05/2025",
+		data: "2025-05-18",
 		forma_pagamento: 2,
 		tipo_pagamento: 2,
 		status_despesa: 2,
@@ -159,7 +159,7 @@ const despesas = [
 		descricao: "Assinatura streaming",
 		categoria: 9, // Assinaturas e Serviços
 		valor: 29.9,
-		data: "01/05/2025",
+		data: "2025-05-01",
 		forma_pagamento: 2,
 		tipo_pagamento: 1,
 		status_despesa: 1,
@@ -169,7 +169,7 @@ const despesas = [
 		descricao: "Conta de luz",
 		categoria: 10, // Contas e Utilidades
 		valor: 150,
-		data: "10/05/2025",
+		data: "2025-05-10",
 		forma_pagamento: 4,
 		tipo_pagamento: 1,
 		status_despesa: 1,
@@ -179,7 +179,7 @@ const despesas = [
 		descricao: "Investimento em ações",
 		categoria: 11, // Investimentos
 		valor: 1000,
-		data: "02/05/2025",
+		data: "2025-05-02",
 		forma_pagamento: 3,
 		tipo_pagamento: 1,
 		status_despesa: 1,
