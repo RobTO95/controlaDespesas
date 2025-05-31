@@ -6,7 +6,6 @@ const categoria = [
 	{ categoria: "Transporte" },
 	{ categoria: "Moradia" },
 	{ categoria: "Saúde" },
-	{ categoria: "Saúde" },
 	{ categoria: "Educação" },
 	{ categoria: "Lazer" },
 	{ categoria: "Compras" },
