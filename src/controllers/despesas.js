@@ -203,12 +203,21 @@ async function carregarDespesas(orderBy = {}) {
  */
 function coletarFiltros() {
 	const filters = {
-		descricao: document.getElementById("descricao-filter").valor || undefined,
-		categoria: document.getElementById("categoria-filter").value || undefined,
-		valor: document.getElementById("valor-filter").value || undefined,
-		data: document.getElementById("data-filter").value || undefined,
-		status_despesa:
-			document.getElementById("status-despesa-filter").value || undefined,
+		descricao: document.getElementById("descricao-filter")
+			? document.getElementById("descricao-filter").valor
+			: undefined,
+		categoria: document.getElementById("categoria-filter")
+			? document.getElementById("categoria-filter").value
+			: undefined,
+		valor: document.getElementById("valor-filter")
+			? document.getElementById("valor-filter").value
+			: undefined,
+		data: document.getElementById("data-filter")
+			? document.getElementById("data-filter").value
+			: undefined,
+		status_despesa: document.getElementById("status-despesa-filter")
+			? document.getElementById("status-despesa-filter").value
+			: undefined,
 	};
 
 	return filters;

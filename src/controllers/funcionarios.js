@@ -100,6 +100,7 @@ async function carregarFuncionarios(orderBy = {}) {
 // Função para carregar pagamentos vinculados a um funcionário
 async function carregarPagamentosFuncionario(id = null) {
 	const tabelaDespesaFuncionario = document.getElementById("table-funcionario");
+	if (!tabelaDespesaFuncionario) return;
 	tabelaPagamentosInterativa = new TabelaInterativa(tabelaDespesaFuncionario);
 	const pagamentos = id
 		? await window.api.invoke("despesa-funcionario:get-all-on-funcionario", id)
@@ -201,6 +202,7 @@ export async function openFuncionarios() {
 		const confirmado = await mostrarConfirmacao("Excluir funcionario?");
 		if (id && confirmado) {
 			await window.api.invoke("funcionario:delete", id);
+			id_funcionario = null;
 			carregarFuncionarios();
 		}
 	});
