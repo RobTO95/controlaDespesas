@@ -1,7 +1,7 @@
 import SelectInterativo from "../models/SelectInterativo.js";
 import { converterDataParaISO } from "../utils/formaters.js";
 
-export async function loadModalDespesa(id_html) {
+export async function loadModalDespesa(id_html, id_funcionario = null) {
 	try {
 		const response = await fetch("./views/modal-despesa.html");
 		if (!response.ok) {
@@ -22,6 +22,40 @@ export async function loadModalDespesa(id_html) {
 		});
 		// Carregar Selects
 		await carregarSelectsModalDespesa();
+		// Submeter formulário
+		const formDespesa = document.getElementById("form-despesa");
+		formDespesa.addEventListener("submit", async (event) => {
+			event.preventDefault();
+			const formData = new FormData(formDespesa);
+			const despesaData = Object.fromEntries(formData.entries());
+			despesaData.funcionario = id_funcionario;
+			try {
+				if (formDespesa.dataset.editingId) {
+					despesaData.id = formDespesa.dataset.editingId;
+					await window.api.invoke("despesa:update", despesaData);
+					delete formDespesa.dataset.editingId;
+				} else {
+					const id_despesa = await window.api.invoke(
+						"despesa:insert",
+						despesaData
+					);
+
+					if (despesaData.funcionario) {
+						await window.api.invoke(
+							"despesa-funcionario:insert",
+							id_despesa,
+							despesaData.funcionario
+						);
+					}
+				}
+				formDespesa.reset();
+				removerModalDespesa(id_html);
+				// Disparar evento customizado para atualizar tabela
+				window.dispatchEvent(new CustomEvent("atualizarTabelaDespesas"));
+			} catch (error) {
+				console.error("Erro ao salvar despesa:", error);
+			}
+		});
 	} catch (error) {
 		console.error("Erro ao carregar o modal:", error);
 	}
@@ -92,7 +126,9 @@ async function carregarSelectsModalDespesa() {
 
 export async function preencherFormularioDespesa(id) {
 	const formDespesa = document.getElementById("form-despesa");
-	const btnSaveDespesa = document.getElementById("btn-save-modal-despesa");
+	const titleModal = document.getElementById("modal-title");
+	titleModal.innerHTML = `Editar despesa ${id}`;
+	// const btnSaveDespesa = document.getElementById("btn-save-modal-despesa");
 	try {
 		const despesa = await window.api.invoke("despesa:get", id);
 		formDespesa.elements["descricao"].value = despesa.descricao || "";
@@ -106,27 +142,6 @@ export async function preencherFormularioDespesa(id) {
 		formDespesa.elements["status_despesa"].value = despesa.status_despesa || "";
 		formDespesa.elements["observacao"].value = despesa.observacao || "";
 		formDespesa.dataset.editingId = id;
-		// Submeter formulário
-		formDespesa.addEventListener("submit", async (event) => {
-			event.preventDefault();
-			const formData = new FormData(formDespesa);
-			const despesaData = Object.fromEntries(formData.entries());
-			try {
-				if (formDespesa.dataset.editingId) {
-					despesaData.id = formDespesa.dataset.editingId;
-					await window.api.invoke("despesa:update", despesaData);
-					delete formDespesa.dataset.editingId;
-				} else {
-					await window.api.invoke("despesa:insert", despesaData);
-				}
-				formDespesa.reset();
-				removerModalDespesa("despesas");
-				// Disparar evento customizado para atualizar tabela
-				window.dispatchEvent(new CustomEvent("atualizarTabelaDespesas"));
-			} catch (error) {
-				console.error("Erro ao salvar despesa:", error);
-			}
-		});
 	} catch (error) {
 		console.error("Erro ao carregar despesa para edição:", error);
 	}

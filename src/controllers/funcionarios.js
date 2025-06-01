@@ -1,279 +1,294 @@
-import TabelaInterativa from "../models/TabelaInterativa.js";
-import SelectInterativo from "../models/SelectInterativo.js";
+// Importações de classes e funções auxiliares
+import TabelaInterativa from "../models/TabelaInterativa.js"; // Classe para manipulação dinâmica de tabelas
+import SelectInterativo from "../models/SelectInterativo.js"; // Classe para manipulação dinâmica de selects
+import {
+	loadModalDespesa, // Função que carrega o modal para adicionar/editar uma despesa
+	preencherFormularioDespesa, // Função para preencher o formulário de despesas
+} from "./modal-despesas.js";
+import { formatarDataParaBR, formatarMoedaBR } from "../utils/formaters.js"; // Funções utilitárias para formatar data e moeda
+import { mostrarConfirmacao, mostrarMensagem } from "../utils/mensagens.js"; // Funções para exibir mensagens ao usuário
 
-let tabelaColNameClick = "";
-let tabela;
-let statusFuncionario;
-let sexo;
-let vinculo;
+// Variáveis globais de controle de estado
+let tabela, tabelaPagamentosInterativa; // Instâncias de TabelaInterativa para a tabela principal e de despesas
+let tabelaColNameClick = ""; // Nome da coluna clicada para alternar a ordenação
+let id_funcionario; // ID do funcionário atualmente selecionado
+let statusFuncionario, sexo, vinculo; // Dados para popular selects dinâmicos
 
+// Função para carregar os selects do filtro de funcionários
+async function carregarSelects() {
+	// Busca dados do backend via API
+	sexo = await window.api.invoke("get-sexo");
+	vinculo = await window.api.invoke("get-vinculo-funcionario");
+	statusFuncionario = await window.api.invoke("get-status-funcionario");
+
+	// Carrega o select do filtro de status
+	const selectStatusFilterObj = new SelectInterativo(
+		document.getElementById("status_funcionario-filter")
+	);
+	selectStatusFilterObj.load(
+		statusFuncionario,
+		"id",
+		"status_funcionario",
+		true,
+		"Status"
+	);
+}
+
+// Função para carregar os selects do modal de funcionário
+async function carregarSelectsModal() {
+	const sexoModal = new SelectInterativo(
+		document.getElementById("sexo-modal-funcionario")
+	);
+	const statusModal = new SelectInterativo(
+		document.getElementById("status-modal-funcionario")
+	);
+	const vinculoModal = new SelectInterativo(
+		document.getElementById("vinculo-modal-funcionario")
+	);
+
+	sexoModal.load(sexo, "id", "sexo", true, "Sexo");
+	statusModal.load(
+		statusFuncionario,
+		"id",
+		"status_funcionario",
+		true,
+		"Status"
+	);
+	vinculoModal.load(vinculo, "id", "vinculo_funcionario", true, "Vinculo");
+}
+
+// Função para abrir o modal de cadastro/edição de funcionário
+function openModalFuncionario() {
+	carregarSelectsModal(); // Carrega os dados dos selects
+	document.getElementById("imagem-funcionario").src =
+		"../src/public/img/person.png";
+	document.getElementById("funcionario-modal").style.display = "flex";
+}
+
+// Função para fechar o modal e limpar o formulário
+function closeModalFuncionario() {
+	const formFuncionario = document.getElementById("form-funcionario");
+	delete formFuncionario.dataset.editingId; // Remove atributo que indica edição
+	formFuncionario.reset(); // Limpa o formulário
+	document.getElementById("imagem-funcionario").src =
+		"../src/public/img/person.png";
+	document.getElementById("funcionario-modal").style.display = "none";
+}
+
+// Função para carregar funcionários aplicando filtros e ordenação
+async function carregarFuncionarios(orderBy = {}) {
+	const filters = {
+		nome: document.getElementById("nome-filter").value || undefined,
+		contato: document.getElementById("contato-filter").value || undefined,
+		status_funcionario:
+			document.getElementById("status_funcionario-filter").value || undefined,
+	};
+	const funcionarios = await window.api.invoke(
+		"get-funcionarios:filter",
+		filters,
+		orderBy
+	);
+	const colunasCustom = {
+		id: "ID",
+		nome: "Nome",
+		contato: "Contato",
+		status_funcionario: "Status",
+	};
+	tabela.load(funcionarios, colunasCustom); // Carrega a tabela com os dados e colunas personalizadas
+}
+
+// Função para carregar pagamentos vinculados a um funcionário
+async function carregarPagamentosFuncionario(id = null) {
+	const tabelaDespesaFuncionario = document.getElementById("table-funcionario");
+	tabelaPagamentosInterativa = new TabelaInterativa(tabelaDespesaFuncionario);
+	const pagamentos = id
+		? await window.api.invoke("despesa-funcionario:get-all-on-funcionario", id)
+		: [];
+	const pagamentosFormatados = pagamentos.map((p) => ({
+		...p,
+		data: formatarDataParaBR(p.data),
+		valor: formatarMoedaBR(p.valor),
+	}));
+	tabelaPagamentosInterativa.load(pagamentosFormatados, {
+		id: "ID",
+		descricao: "Descrição",
+		categoria: "Categoria",
+		valor: "Valor (R$)",
+		data: "Data",
+		status_despesa: "Status",
+	});
+}
+
+// Preenche o formulário do modal com dados de um funcionário específico para edição
+async function preencherFormularioFuncionario(id) {
+	try {
+		const funcionario = await window.api.invoke("funcionario:get", id);
+		const form = document.getElementById("form-funcionario");
+		for (const [key, value] of Object.entries(funcionario)) {
+			if (form.elements[key]) form.elements[key].value = value;
+		}
+		form.dataset.editingId = id;
+		document.getElementById("imagem-funcionario").src = funcionario.imagem
+			? `../${funcionario.imagem}?t=${Date.now()}`
+			: "../src/public/img/person.png";
+	} catch (error) {
+		console.error("Erro ao carregar funcionario:", error);
+	}
+}
+
+// Função principal para inicializar e gerenciar a tela de funcionários
 export async function openFuncionarios() {
+	// Inicializa a tabela principal
 	tabela = new TabelaInterativa(document.getElementById("table-funcionarios"));
 
-	tabela.setOnColunaClick((nomeColuna, indiceColuna) => {
-		// console.log(`Coluna clicada: ${nomeColuna}, índice: ${indiceColuna}`);
-		// Aqui você pode fazer qualquer lógica personalizada (ex: ordenação)
-		const orderBy = {};
-		if (nomeColuna === tabelaColNameClick) {
-			orderBy.order = "DESC";
-			tabelaColNameClick = "";
-		} else {
-			orderBy.order = "ASC";
-			tabelaColNameClick = nomeColuna;
-		}
-		// f.id, f.nome, f.contato, sf.status_funcionario
-		if (nomeColuna === "status_funcionario") {
-			orderBy.name = `sf.${nomeColuna}`;
-		} else {
-			orderBy.name = `f.${nomeColuna}`;
-		}
-		carregarFuncionarios(orderBy);
+	// Configura a ordenação da tabela ao clicar nos cabeçalhos
+	tabela.setOnColunaClick(async (nomeColuna, indiceColuna) => {
+		const orderBy = {
+			order: nomeColuna === tabelaColNameClick ? "DESC" : "ASC",
+		};
+		tabelaColNameClick = nomeColuna === tabelaColNameClick ? "" : nomeColuna;
+		orderBy.name =
+			nomeColuna === "status_funcionario"
+				? `sf.${nomeColuna}`
+				: `f.${nomeColuna}`;
+		await carregarFuncionarios(orderBy);
 	});
 
-	// Botões --------------------------------------------------------
-	const btnUpdate = document.getElementById("update");
-	const btnAdd = document.getElementById("add");
-	const btnEdit = document.getElementById("edit");
-	const btnDelete = document.getElementById("delete");
-	const btnSearch = document.getElementById("search");
-	const btnClear = document.getElementById("clear-filters");
-
-	// Filtros -------------------------------------------------------
-	const inputNomeFilter = document.getElementById("nome-filter");
-	const inputContatoFilter = document.getElementById("contato-filter");
-
+	// Configura eventos dos filtros e botões
 	const selectStatusFilter = document.getElementById(
 		"status_funcionario-filter"
 	);
 	const selectStatusFilterObj = new SelectInterativo(selectStatusFilter);
 
-	// Modal ---------------------------------------------------------
-	const modalFuncionario = document.getElementById("funcionario-modal");
-	const formFuncionario = document.getElementById("form-funcionario");
-
-	// imagem funcionario
-	const imgFuncionario = document.getElementById("imagem-funcionario");
-	imgFuncionario.addEventListener("dblclick", addImage);
-	// <button id="add-imagem">Add</button>
-	const btnAddImg = document.getElementById("add-imagem");
-	btnAddImg.addEventListener("click", addImage);
-
-	async function addImage() {
-		const imgPath = await window.api.invoke("funcionario:get-image");
-		imgFuncionario.src = imgPath ? imgPath : imgFuncionario.src;
-	}
-
-	// <button id="delete-imagem">Remove</button>
-	const btnDeleteImg = document.getElementById("delete-imagem");
-	btnDeleteImg.addEventListener("click", removeImage);
-	function removeImage() {
-		imgFuncionario.src = "./public/img/person.png";
-	}
-
-	const btnCloseModalFuncionario = document.getElementById(
-		"close-modal-funcionario"
-	);
-	const selectSexoModal = document.getElementById("sexo-modal-funcionario");
-	const selectStatusModal = document.getElementById("status-modal-funcionario");
-	const selectVinculoModal = document.getElementById(
-		"vinculo-modal-funcionario"
-	);
-
-	/* -------------------------- EVENTOS -------------------------- */
-	btnSearch.addEventListener("click", carregarFuncionarios);
-	inputContatoFilter.addEventListener("input", carregarFuncionarios);
-	inputNomeFilter.addEventListener("input", carregarFuncionarios);
-	selectStatusFilter.addEventListener("change", carregarFuncionarios);
-	btnClear.addEventListener("click", () => {
-		inputNomeFilter.value = "";
-		inputContatoFilter.value = "";
+	document
+		.getElementById("update")
+		.addEventListener("click", carregarFuncionarios);
+	document
+		.getElementById("search")
+		.addEventListener("click", carregarFuncionarios);
+	document.getElementById("clear-filters").addEventListener("click", () => {
+		["nome-filter", "contato-filter"].forEach(
+			(id) => (document.getElementById(id).value = "")
+		);
 		selectStatusFilter.value = "";
 		carregarFuncionarios();
 	});
+	["nome-filter", "contato-filter"].forEach((id) =>
+		document.getElementById(id).addEventListener("input", carregarFuncionarios)
+	);
+	selectStatusFilter.addEventListener("change", carregarFuncionarios);
 
-	btnUpdate.addEventListener("click", carregarFuncionarios);
+	await carregarSelects(); // Carrega dados dos selects
+	carregarFuncionarios(); // Carrega tabela inicial
 
-	btnAdd.addEventListener("click", () => {
+	// CRUD de funcionários
+	document.getElementById("add").addEventListener("click", () => {
 		openModalFuncionario();
+		carregarPagamentosFuncionario();
 	});
-
-	btnEdit.addEventListener("click", () => {
-		const idSelecionado = tabela.getSelectedRowId();
-
-		if (!idSelecionado) {
-			return alert("Selecione uma despesa para editar.");
-		} else {
-			preencherFormularioFuncionario(idSelecionado);
-			carregarPagamentosFuncionario(idSelecionado);
+	document.getElementById("edit").addEventListener("click", () => {
+		const id = tabela.getSelectedRowId();
+		if (id) {
+			preencherFormularioFuncionario(id);
+			carregarPagamentosFuncionario(id);
 			openModalFuncionario();
+			id_funcionario = id;
+		} else mostrarMensagem("Selecione um funcionario para editar.");
+	});
+	document.getElementById("delete").addEventListener("click", async () => {
+		const id = tabela.getSelectedRowId();
+		if (!id) return mostrarMensagem("Selecione um funcionario para excluir.");
+		const confirmado = await mostrarConfirmacao("Excluir funcionario?");
+		if (id && confirmado) {
+			await window.api.invoke("funcionario:delete", id);
+			carregarFuncionarios();
 		}
 	});
 
-	btnDelete.addEventListener("click", async () => {
-		const idSelecionado = tabela.getSelectedRowId();
-		if (!idSelecionado)
-			return alert("Por favor, selecione um funcionario para excluir.");
-		if (confirm("Tem certeza que deseja excluir este funcionario?")) {
-			try {
-				await window.api.invoke("funcionario:delete", idSelecionado);
-				await carregarFuncionarios();
-			} catch (error) {
-				console.error("Erro ao excluir funcionario:", error);
-			}
-		}
+	// Botões para imagem do funcionário
+	const imgFuncionario = document.getElementById("imagem-funcionario");
+	document.getElementById("add-imagem").addEventListener("click", async () => {
+		const imgPath = await window.api.invoke("funcionario:get-image");
+		if (imgPath) imgFuncionario.src = imgPath;
 	});
-	// Eventos Modal -------------------------------------------------------
-	btnCloseModalFuncionario.addEventListener("click", () => {
-		closeModalFuncionario();
+	document.getElementById("delete-imagem").addEventListener("click", () => {
+		imgFuncionario.src = "./public/img/person.png";
 	});
 
-	window.addEventListener("click", (e) => {
-		if (e.target === modalFuncionario) closeModalFuncionario();
-	});
-
-	formFuncionario.addEventListener("submit", salvarFuncionario);
-
-	/* -------------------------- FUNÇÕES -------------------------- */
-	async function salvarFuncionario(event) {
-		event.preventDefault();
-		const formData = new FormData(formFuncionario);
-		const funcionarioData = Object.fromEntries(formData.entries());
-		funcionarioData.imagem = imgFuncionario.src;
-		try {
-			if (formFuncionario.dataset.editingId) {
-				funcionarioData.id = formFuncionario.dataset.editingId;
-				await window.api.invoke("funcionario:update", funcionarioData);
-				delete formFuncionario.dataset.editingId;
-			} else {
-				const id = await window.api.invoke(
-					"funcionario:insert",
-					funcionarioData
-				);
-			}
-			await carregarFuncionarios();
+	// Botão para fechar o modal
+	document
+		.getElementById("close-modal-funcionario")
+		.addEventListener("click", () => {
 			closeModalFuncionario();
-			imgFuncionario.src = "./public/img/person.png";
-			formFuncionario.reset();
-		} catch (error) {
-			console.error("Erro ao salvar funcionario:", error);
-		}
-	}
+			id_funcionario = null;
+		});
+	window.addEventListener(
+		"click",
+		(e) =>
+			e.target === document.getElementById("funcionario-modal") &&
+			closeModalFuncionario()
+	);
 
-	async function carregarSelects() {
-		sexo = await window.api.invoke("get-sexo");
-		vinculo = await window.api.invoke("get-vinculo-funcionario");
-		statusFuncionario = await window.api.invoke("get-status-funcionario");
-		selectStatusFilterObj.load(
-			statusFuncionario,
-			"id",
-			"status_funcionario",
-			true,
-			"Status"
-		);
-	}
-	carregarSelects();
+	// Submissão do formulário (inserção ou atualização)
+	document
+		.getElementById("form-funcionario")
+		.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			const form = e.target;
+			const data = Object.fromEntries(new FormData(form).entries());
+			data.imagem = imgFuncionario.src;
+			try {
+				if (form.dataset.editingId) {
+					data.id = form.dataset.editingId;
+					await window.api.invoke("funcionario:update", data);
+					delete form.dataset.editingId;
+				} else {
+					id_funcionario = await window.api.invoke("funcionario:insert", data);
+				}
+				carregarFuncionarios();
+				closeModalFuncionario();
+				carregarPagamentosFuncionario(id_funcionario);
+			} catch (error) {
+				console.error("Erro ao salvar funcionario:", error);
+			}
+		});
 
-	async function carregarSelectsModal() {
-		const sexoModal = new SelectInterativo(selectSexoModal);
-		const statusModal = new SelectInterativo(selectStatusModal);
-		const vinculoModal = new SelectInterativo(selectVinculoModal);
+	// CRUD de pagamentos (despesas) do funcionário
+	document
+		.getElementById("add-despesa-funcionario")
+		.addEventListener("click", () => {
+			if (id_funcionario) loadModalDespesa("funcionarios", id_funcionario);
+			else
+				mostrarMensagem("Salve o funcionário antes de adicionar um pagamento.");
+		});
+	document
+		.getElementById("edit-despesa-funcionario")
+		.addEventListener("click", async () => {
+			if (id_funcionario) {
+				const idSelecionado = tabelaPagamentosInterativa.getSelectedRowId();
+				if (idSelecionado) {
+					await loadModalDespesa("funcionarios", id_funcionario);
+					preencherFormularioDespesa(idSelecionado);
+				} else mostrarMensagem("Selecione uma despesa para editar.");
+			} else
+				mostrarMensagem("Salve o funcionário antes de editar um pagamento.");
+		});
+	document
+		.getElementById("delete-despesa-funcionario")
+		.addEventListener("click", async () => {
+			if (id_funcionario) {
+				const idSelecionado = tabelaPagamentosInterativa.getSelectedRowId();
+				const confirmado = await mostrarConfirmacao("Excluir pagamento?");
+				if (idSelecionado && confirmado) {
+					await window.api.invoke("despesa:delete", idSelecionado);
+					carregarPagamentosFuncionario(id_funcionario);
+				} else mostrarMensagem("Selecione um pagamento para excluir.");
+			} else
+				mostrarMensagem("Salve o funcionário antes de remover um pagamento.");
+		});
 
-		sexoModal.load(sexo, "id", "sexo", true, "Sexo");
-		statusModal.load(
-			statusFuncionario,
-			"id",
-			"status_funcionario",
-			true,
-			"Status"
-		);
-		vinculoModal.load(vinculo, "id", "vinculo_funcionario", true, "Vinculo");
-	}
-
-	function openModalFuncionario() {
-		carregarSelectsModal();
-		imgFuncionario.src = "../src/public/img/person.png";
-		modalFuncionario.style.display = "flex";
-	}
-	function closeModalFuncionario() {
-		delete formFuncionario.dataset.editingId;
-		formFuncionario.reset();
-		imgFuncionario.src = "../src/public/img/person.png";
-		modalFuncionario.style.display = "none";
-	}
-
-	async function carregarFuncionarios(orderBy = {}) {
-		const filters = {};
-		if (inputNomeFilter.value) {
-			filters.nome = inputNomeFilter.value;
-		}
-		if (inputContatoFilter.value) {
-			filters.contato = inputContatoFilter.value;
-		}
-		if (selectStatusFilter.value) {
-			filters.status_funcionario = selectStatusFilter.value;
-		}
-
-		const funcionarios = await window.api.invoke(
-			"get-funcionarios:filter",
-			filters,
-			orderBy
-		);
-
-		const colunasCustom = {
-			id: "ID",
-			nome: "Nome",
-			contato: "Contato",
-			status_funcionario: "Status",
-		};
-		tabela.load(funcionarios, colunasCustom);
-	}
-	carregarFuncionarios();
-
-	async function preencherFormularioFuncionario(id) {
-		try {
-			const funcionario = await window.api.invoke("funcionario:get", id);
-			formFuncionario.elements["nome"].value = funcionario.nome;
-			formFuncionario.elements["sexo"].value = funcionario.sexo;
-			formFuncionario.elements["cpf"].value = funcionario.cpf;
-			formFuncionario.elements["data_nascimento"].value =
-				funcionario.data_nascimento;
-			formFuncionario.elements["contato"].value = funcionario.contato;
-			formFuncionario.elements["endereco"].value = funcionario.endereco;
-			formFuncionario.elements["cep"].value = funcionario.cep;
-			formFuncionario.elements["email"].value = funcionario.email;
-			formFuncionario.elements["status_funcionario"].value =
-				funcionario.status_funcionario;
-			formFuncionario.elements["banco"].value = funcionario.banco;
-			formFuncionario.elements["agencia"].value = funcionario.agencia;
-			formFuncionario.elements["conta"].value = funcionario.conta;
-			formFuncionario.elements["vinculo"].value = funcionario.vinculo;
-			imgFuncionario.src = funcionario.imagem
-				? `../${funcionario.imagem}?t=${Date.now()}`
-				: "../src/public/img/person.png";
-			formFuncionario.dataset.editingId = id;
-		} catch (error) {
-			console.error("Erro ao carregar funcionario para edição:", error);
-		}
-	}
-
-	async function carregarPagamentosFuncionario(id) {
-		const tabelaDespesaFuncionario =
-			document.getElementById("table-funcionario");
-		const tabelaPagamentosInterativa = new TabelaInterativa(
-			tabelaDespesaFuncionario
-		);
-		const pagamentos = await window.api.invoke(
-			"despesa-funcionario:get-all-on-funcionario",
-			id
-		);
-		const colunasCustom = {
-			id: "ID",
-			descricao: "Descrição",
-			categoria: "Categoria",
-			valor: "Valor (R$)",
-			data: "Data",
-			status_despesa: "Status",
-		};
-		tabelaPagamentosInterativa.load(pagamentos, colunasCustom);
-	}
+	// Atualiza automaticamente a tabela de pagamentos quando necessário
+	window.addEventListener("atualizarTabelaDespesas", () => {
+		if (id_funcionario) carregarPagamentosFuncionario(id_funcionario);
+	});
 }

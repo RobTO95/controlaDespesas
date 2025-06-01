@@ -89,8 +89,8 @@ ipcMain.handle("despesa:update", (event, data) => {
 });
 
 // Handler para deletar despesa
-ipcMain.handle("despesa:delete", (event, id) => {
+ipcMain.handle("despesa:delete", async (event, id) => {
 	const despesa = new Despesa(id);
-	despesa.delete();
+	await despesa.delete();
 	return true;
 });

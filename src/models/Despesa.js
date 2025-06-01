@@ -80,7 +80,14 @@ class Despesa {
 	// Remove a despesa do banco
 	delete() {
 		if (!this.id) throw new Error("ID não definido para exclusão.");
-		this.db.prepare(`DELETE FROM tabDespesas WHERE id = ?`).run(this.id);
+		return new Promise((resolve, reject) => {
+			try {
+				this.db.prepare(`DELETE FROM tabDespesas WHERE id = ?`).run(this.id);
+				resolve();
+			} catch (error) {
+				reject(error);
+			}
+		});
 	}
 
 	// Retorna todas as despesas (static para não depender de instância)
