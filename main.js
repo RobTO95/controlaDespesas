@@ -43,8 +43,19 @@ app.on("window-all-closed", () => {
 const despesaIpc = require("./src/ipc/despesaIpc.js");
 const funcionarioIpc = require("./src/ipc/funcionarioIpc.js");
 const despesaFuncionarioIpc = require("./src/ipc/despesaFuncionarioIpc.js");
+const { exportToExcel } = require("./src/utils/export.js");
+const { error } = require("console");
 
 // Comunicação para enviar dados >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.handle("export:excel", async (event, data, name) => {
+    const result = await exportToExcel(data, name);
+    if (result === true) {
+        return { success: true };
+    } else {
+        return { success: false, error: result.message || String(result) };
+    }
+});
+
 ipcMain.handle("get-despesas", () => {
     try {
         const query = `
