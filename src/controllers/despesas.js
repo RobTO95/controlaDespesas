@@ -67,6 +67,7 @@ function configurarBotoesControle() {
 	const btnEdit = document.getElementById("edit");
 	const btnDelete = document.getElementById("delete");
 	const btnUpdate = document.getElementById("update");
+	const btnExport = document.getElementById("export");
 
 	btnAdd.addEventListener("click", async () => {
 		await loadModalDespesa("despesas");
@@ -103,6 +104,26 @@ function configurarBotoesControle() {
 	});
 
 	btnUpdate.addEventListener("click", carregarDespesas);
+
+	btnExport.addEventListener("click", async () => {
+		const response = await window.api.invoke(
+			"export:excel",
+			tabela.data,
+			"relatorio_despesas.xlsx"
+		);
+
+		if (response.success) {
+			mostrarMensagem("Relatório gerado e aberto com sucesso.");
+		} else {
+			if (response.error.includes("Feche o arquivo")) {
+				mostrarMensagem(
+					"Erro: o arquivo já está aberto. Feche o Excel e tente novamente."
+				);
+			} else {
+				mostrarMensagem("Erro ao exportar: " + response.error);
+			}
+		}
+	});
 }
 
 /**
