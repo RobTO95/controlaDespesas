@@ -1,0 +1,32 @@
+#analises {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+#control-filters {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: row;
+	gap: 0.75rem;
+	padding: 0 1rem;
+	justify-content: space-between;
+	color: var(--b1-1-color);
+	background: rgba(255, 255, 255, 0.4);
+	border-radius: 0.75rem;
+	align-items: center;
+}
+
+#dash {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+#dash .row > * {
+	height: 39dvh;
+}
