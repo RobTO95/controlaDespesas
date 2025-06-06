@@ -1,7 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
-
 contextBridge.exposeInMainWorld("api", {
-    getDespesas: () => ipcRenderer.invoke("get-despesas"),
+    getDespesas: (orderBy) => ipcRenderer.invoke("get-despesas", orderBy),
     getCategoriasDespesas: () => ipcRenderer.invoke("get-categoria-despesa"),
     getFormaPagamento: () => ipcRenderer.invoke("get-forma-pagamento"),
     getTipoPagamento: () => ipcRenderer.invoke("get-tipo-pagamento"),

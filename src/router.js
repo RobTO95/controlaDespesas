@@ -21,6 +21,8 @@ async function loadPage(path) {
             import("./controllers/funcionarios.js").then((module) => {
                 module.openFuncionarios();
             });
+        } else if (path === "/analises") {
+            import("./controllers/analises.js").then((module) => {});
         }
     } catch (e) {
         document.getElementById("app").innerHTML =

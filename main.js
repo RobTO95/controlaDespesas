@@ -56,7 +56,7 @@ ipcMain.handle("export:excel", async (event, data, name) => {
     }
 });
 
-ipcMain.handle("get-despesas", () => {
+ipcMain.handle("get-despesas", (orderBy = {}) => {
     try {
         const query = `
 		SELECT 
@@ -68,6 +68,12 @@ ipcMain.handle("get-despesas", () => {
 		INNER JOIN 
 			tabStatusDespesa AS s ON d.status_despesa = s.id`;
 
+        if (orderBy.name) {
+            query += ` ORDER BY ${orderBy.name}`;
+            if (orderBy.order) {
+                query += ` ${orderBy.name}`;
+            }
+        }
         const despesas = db.prepare(query).all();
         return despesas;
     } catch (e) {
